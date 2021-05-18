@@ -3,4 +3,11 @@
   <groupId>fr.ul.miage</groupId>
   <artifactId>ProjetGenieLogiciel</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+    <dependencies>
+  	<dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.2.5</version>
+    </dependency>
+  </dependencies>
 </project>
