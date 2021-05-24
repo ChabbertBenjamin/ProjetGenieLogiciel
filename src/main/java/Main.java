@@ -2,9 +2,9 @@
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 
-		Utile.getSQLServerConnection(); 
+		DBConnection con = new DBConnection();
+		Frame1 f = new Frame1();
 	
 	}
 

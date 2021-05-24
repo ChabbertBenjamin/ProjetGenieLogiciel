@@ -54,23 +54,23 @@ public class SaisirCommande {
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 
         idcommande = new JLabel("Entrer id commande");
-        JTextField tf2=new JTextField();
+        final JTextField tf2=new JTextField();
         tf2.setSize(100,40);
 
         idplat = new JLabel("Entrer id plat");
-        JTextField tf3=new JTextField();
+        final JTextField tf3=new JTextField();
         tf3.setSize(100,40);
 
         statut = new JLabel("Entrer statut");
-        JTextField tf4=new JTextField();
+        final JTextField tf4=new JTextField();
         tf4.setSize(100,40);
         
         dateheurecommande = new JLabel("Entrer date et heure de la commande");
-        JTextField tf5=new JTextField();
+        final JTextField tf5=new JTextField();
         tf5.setSize(100,40);
         
         idtable = new JLabel("Entrer id de la table");
-        JTextField tf6=new JTextField();
+        final JTextField tf6=new JTextField();
         tf6.setSize(100,40);
         
         JButton okButton = new JButton("OK");

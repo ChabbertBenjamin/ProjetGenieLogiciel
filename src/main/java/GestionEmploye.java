@@ -54,11 +54,11 @@ public class GestionEmploye {
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 
         idtable = new JLabel("Entrer id employe");
-        JTextField tf2=new JTextField();
+        final JTextField tf2=new JTextField();
         tf2.setSize(100,40);
 
         idemploye = new JLabel("Selectionner une table");
-        JTextField tf3=new JTextField();
+        final JTextField tf3=new JTextField();
         tf3.setSize(100,40);
         
         JButton okButton = new JButton("OK");

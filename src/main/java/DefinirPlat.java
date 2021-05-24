@@ -12,7 +12,7 @@ public class DefinirPlat {
    private JPanel controlPanel;
    private JLabel idplat, idcategorie, prix, idmatierepremiere;
    GridLayout experimentLayout = new GridLayout(0,2);
-    ResultSet rs;
+   ResultSet rs;
 
     DefinirPlat(){
 
@@ -54,19 +54,19 @@ public class DefinirPlat {
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 
         idplat = new JLabel("Entrer id du plat");
-        JTextField tf2=new JTextField();
+        final JTextField tf2=new JTextField();
         tf2.setSize(100,40);
 
         idcategorie = new JLabel("Entrer id de la categorie");
-        JTextField tf3=new JTextField();
+        final JTextField tf3=new JTextField();
         tf3.setSize(100,40);
 
         prix = new JLabel("Entrer le prix du plat");
-        JTextField tf4=new JTextField();
+        final JTextField tf4=new JTextField();
         tf4.setSize(100,40);
         
         idmatierepremiere = new JLabel("Entrer id matiere premiere");
-        JTextField tf5=new JTextField();
+        final JTextField tf5=new JTextField();
         tf5.setSize(100,40);
         
         JButton okButton = new JButton("OK");

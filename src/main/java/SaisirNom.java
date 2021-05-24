@@ -54,13 +54,13 @@ public class SaisirNom {
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 
         nom = new JLabel("Entrer nom");
-        JTextField tf2=new JTextField();
+        final JTextField tf2=new JTextField();
         tf2.setSize(100,40);
         
         JButton okButton = new JButton("OK");
 
 
-      okButton.addActionListener(new ActionListener() {
+    okButton.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
             PreparedStatement pst;
             DBConnection con = new DBConnection();

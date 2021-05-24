@@ -20,7 +20,8 @@ public class GererCarteDuJour extends JFrame{
    int i = 0;
     ArrayList<cartedujourCart> cartedujourList = new ArrayList<>();
 
-    GererCarteDuJour(){
+
+	GererCarteDuJour(){
        JPanel jp2 = new JPanel();
        jp2.setSize(400, 400);
 
