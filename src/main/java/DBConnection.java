@@ -9,8 +9,9 @@ public class DBConnection {
     String url = "jdbc:postgresql://100.74.37.114/GL_Projet_G15";
     String user = "m1user1_10";
     String pass = "m1user1_10";
-    
+  
     public DBConnection() {
+    	
     	try {
 			mkDataBase();
 		} catch (SQLException e) {
@@ -23,12 +24,9 @@ public class DBConnection {
           //étape 1: charger la classe de driver
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection(url, user, pass);
-            System.out.println(con);
            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("erreur");
-     
         }
         return con;
     }
