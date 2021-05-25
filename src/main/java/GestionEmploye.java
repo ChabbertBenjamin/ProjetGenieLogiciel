@@ -14,6 +14,7 @@ public class GestionEmploye {
    GridLayout experimentLayout = new GridLayout(0,2);
     ResultSet rs;
 
+
     GestionEmploye(){
 
 
@@ -45,6 +46,8 @@ public class GestionEmploye {
       mainFrame.add(headerLabel);
       mainFrame.add(controlPanel);
       mainFrame.setVisible(true);
+      
+      
    }
 
 
@@ -62,6 +65,7 @@ public class GestionEmploye {
         tf3.setSize(100,40);
         
         JButton okButton = new JButton("OK");
+        JButton create = new JButton("Créer un compte");
 
 
       okButton.addActionListener(new ActionListener() {
@@ -86,6 +90,12 @@ public class GestionEmploye {
             }
          }
       });
+      create.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+        	  CreationEmploye ce = new CreationEmploye();
+        	  ce.showButtonDemo();
+          }
+       });
 
 
 
@@ -100,6 +110,7 @@ public class GestionEmploye {
       jp.setLayout(experimentLayout);
       controlPanel.add(jp);
       jp.add(okButton);
+      jp.add(create);
 		
 
 	  mainFrame.setLocationRelativeTo(null);

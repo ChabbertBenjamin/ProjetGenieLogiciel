@@ -23,6 +23,7 @@ public class Frame1 extends JFrame {
 	JTextField password;
 
 	JButton submit;
+	
 
 	public Frame1() {
 		setTitle("Interface de connexion");
