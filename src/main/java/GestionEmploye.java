@@ -65,7 +65,7 @@ public class GestionEmploye {
         tf3.setSize(100,40);
         
         JButton okButton = new JButton("OK");
-        JButton create = new JButton("Créer un compte");
+        JButton create = new JButton("Créer/Modifier un compte");
 
 
       okButton.addActionListener(new ActionListener() {
@@ -99,6 +99,7 @@ public class GestionEmploye {
 
 
 
+
       JPanel jp = new JPanel(null);
       jp.add(idtable);
       jp.add(tf2);
@@ -111,6 +112,7 @@ public class GestionEmploye {
       controlPanel.add(jp);
       jp.add(okButton);
       jp.add(create);
+
 		
 
 	  mainFrame.setLocationRelativeTo(null);
