@@ -105,7 +105,7 @@ public class CreationEmploye {
 						if (tf4.getText().equals(login)) {
 							alreadyExist = true;
 						}
-					}
+					} 
 					if (tf2.getText().equals("") || tf3.getText().equals("") || tf4.getText().equals("")
 							|| tf5.getText().equals("") || alreadyExist) {
 						test = false;
