@@ -1,8 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.swing.*;
 import java.awt.Color;
 
@@ -12,6 +11,15 @@ public class InterfaceServeur {
    private JLabel headerLabel;
    private JLabel statusLabel;
    private JPanel controlPanel;
+   JTable cart;
+   String[] columnNames = {"idTable  ",
+			"  statut  ",	
+			"  nbCouverts  ",
+			"  etage  ",
+			"idemploye"};
+   
+   Object data[][] = new Object[100][5];
+   int i =0;
    
 
    public InterfaceServeur(){
@@ -65,6 +73,27 @@ public class InterfaceServeur {
 		headerLabel.setText("Serveur");
 		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
 		headerLabel.setForeground(Color.white);
+		  try{	
+	        	 DBConnection con = new DBConnection();
+	             Statement stmt =  con.mkDataBase().createStatement();
+	             ResultSet rs = stmt.executeQuery("select idtable, statut, nbcouverts, etage, idemploye from tables");
+	             while (rs.next()){
+	            	data[i][0] = rs.getInt("idtable"); 
+	                data[i][1] = rs.getString("statut");
+	                data[i][2] = rs.getInt("nbcouverts"); 
+	                data[i][3] = rs.getInt("etage"); 
+	                data[i][4] = rs.getInt("idemploye"); 
+	                i++;
+	             }
+	             cart = new JTable(data, columnNames);
+	             controlPanel.add(cart);
+	       
+	   
+	             
+	        }
+	         catch(Exception ex){
+	             System.out.println(ex);
+	         }
 		
 		JButton billButton = new JButton("Saisir la commande");
 		JButton afButton = new JButton("Modifier une commande");
