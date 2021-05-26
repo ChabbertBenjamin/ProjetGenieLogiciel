@@ -23,7 +23,7 @@ public class Frame1 extends JFrame {
 	JTextField password;
 
 	JButton submit;
-
+	int idemploye;
 	public Frame1() {
 		setTitle("Interface de connexion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,13 +92,14 @@ public class Frame1 extends JFrame {
 	public void submitActionPerformed(java.awt.event.ActionEvent evt) {
 		DBConnection con = new DBConnection();
 		ResultSet résultats = null;
-		String requete = "SELECT login, motdepasse,role FROM employe WHERE login='" + id.getText() + "'";
+		String requete = "SELECT idemploye, login, motdepasse,role FROM employe WHERE login='" + id.getText() + "'";
 		Boolean connect = false;
 		try {
 			Statement stmt = con.con.createStatement();
 			résultats = stmt.executeQuery(requete);
 			String role = null;
 			while (résultats.next() && !connect) {
+				idemploye = résultats.getInt("idemploye");
 				String login = résultats.getString("login");
 				String password = résultats.getString("motdepasse");
 				role = résultats.getString("role");
@@ -113,7 +114,7 @@ public class Frame1 extends JFrame {
 				this.hide();
 				if (role.equals("serveur")) {
 					InterfaceServeur fn = new InterfaceServeur();
-					fn.showButtonDemo();
+					fn.showButtonDemo(idemploye);
 
 				} else if (role.equals("directeur")) {
 					InterfaceDirecteur fn = new InterfaceDirecteur();

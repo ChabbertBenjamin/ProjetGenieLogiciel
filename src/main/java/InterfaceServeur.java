@@ -28,13 +28,13 @@ public class InterfaceServeur {
       prepareGUI();
 		
    }
-
+/*
    public static void main(String[] args){
 	   InterfaceServeur  swingControlDemo = new InterfaceServeur();
       swingControlDemo.showButtonDemo();
 	  
    }
-
+*/
    private void prepareGUI(){
       mainFrame = new JFrame("Serveur");
       mainFrame.setBounds(100,100,700,400);
@@ -68,7 +68,7 @@ public class InterfaceServeur {
    }
 
 
-   public void showButtonDemo(){
+   public void showButtonDemo(int idEmploye){
 
 		headerLabel.setText("Serveur");
 		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
@@ -76,7 +76,7 @@ public class InterfaceServeur {
 		  try{	
 	        	 DBConnection con = new DBConnection();
 	             Statement stmt =  con.mkDataBase().createStatement();
-	             ResultSet rs = stmt.executeQuery("select idtable, statut, nbcouverts, etage, idemploye from tables");
+	             ResultSet rs = stmt.executeQuery("select idtable, statut, nbcouverts, etage, idemploye from tables WHERE idemploye='" +idEmploye+ "'");
 	             while (rs.next()){
 	            	data[i][0] = rs.getInt("idtable"); 
 	                data[i][1] = rs.getString("statut");
