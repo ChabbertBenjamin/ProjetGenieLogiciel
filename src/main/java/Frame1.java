@@ -92,17 +92,17 @@ public class Frame1 extends JFrame {
 
 	public void submitActionPerformed(java.awt.event.ActionEvent evt) {
 		DBConnection con = new DBConnection();
-		ResultSet résultats = null;
+		ResultSet resultats = null;
 		String requete = "SELECT login, motdepasse,role FROM employe WHERE login='" + id.getText() + "'";
 		Boolean connect = false;
 		try {
 			Statement stmt = con.con.createStatement();
-			résultats = stmt.executeQuery(requete);
+			resultats = stmt.executeQuery(requete);
 			String role = null;
-			while (résultats.next() && !connect) {
-				String login = résultats.getString("login");
-				String password = résultats.getString("motdepasse");
-				role = résultats.getString("role");
+			while (resultats.next() && !connect) {
+				String login = resultats.getString("login");
+				String password = resultats.getString("motdepasse");
+				role = resultats.getString("role");
 				// Si l'identifiant et le mot de passe correcsponde à un compte
 				if (id.getText().equals(login) && this.password.getText().equals(password)) {
 					connect = true;
