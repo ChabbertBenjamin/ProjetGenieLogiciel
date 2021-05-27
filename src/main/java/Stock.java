@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,12 +14,10 @@ public class Stock {
 	private JTable cart;
 	private JPanel controlPanel;
 	private JLabel headerLabel;
-	private JFrame mainFrame;
-	private JFrame buyFrame;
+	private JFrame mainFrame, buyFrame, manageFrame;
+
 	private DBConnection con;
 	GridLayout experimentLayout = new GridLayout(0, 3);
-
-	private JLabel firstNameEmploye, lastNameEmplye, login, password;
 
 	public Stock() {
 		this.con = new DBConnection();
@@ -60,7 +60,7 @@ public class Stock {
 
 	public void BuyStock() {
 		buyFrame = new JFrame("Acheter");
-		buyFrame.setSize(400, 300);
+		buyFrame.setSize(600, 400);
 		buyFrame.setLayout(new GridLayout(3, 1));
 		buyFrame.getContentPane().setBackground(Color.gray);
 
@@ -74,26 +74,9 @@ public class Stock {
 		buyFrame.add(controlPanel);
 		buyFrame.setVisible(true);
 
-
-
-
 		// JComboBox pour sélectionner l'employé à modifier
-		JComboBox<String> listMatierePremiere = new JComboBox<String>();
-
-		ResultSet résultats = null;
-		String requete = "SELECT nom FROM matierepremiere";
-		try {
-			Statement stmt = con.con.createStatement();
-			résultats = stmt.executeQuery(requete);
-			while (résultats.next()) {
-				String name = résultats.getString("nom");
-				listMatierePremiere.addItem(name);
-			}
-			résultats.close();
-			stmt.close();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		JComboBox<String> list = new JComboBox<String>();
+		JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
 
 		JLabel quantite = new JLabel(" Entrer quantité ");
 		final JTextField textFieldQuantite = new JTextField();
@@ -101,40 +84,49 @@ public class Stock {
 
 		JButton buy = new JButton("Acheter");
 		buy.setSize(40, 50);
-		
+
 		buy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				String nom = (String) listMatierePremiere.getSelectedItem();
-				if(!textFieldQuantite.getText().equals("")) {
-					try {
-						String requete = "SELECT quantite FROM matierepremiere WHERE nom='"+nom+"'";
-						ResultSet résultats = null;
-	        			Statement stmt = con.con.createStatement();
-	        			résultats = stmt.executeQuery(requete);
-	        			int quantiteDB=0;
-	        			while (résultats.next()) {
-	        				quantiteDB = résultats.getInt("quantite");
-	        			}
-						int intQuantite = Integer.parseInt(textFieldQuantite.getText()) + quantiteDB ;  
-						if(Integer.parseInt(textFieldQuantite.getText()) > 0) {
-							PreparedStatement pst;
-		        			pst = con.mkDataBase().prepareStatement("UPDATE matierepremiere SET quantite="+intQuantite+" WHERE nom='" +nom + "'");
-		        			pst.execute();
-							JOptionPane.showMessageDialog(null,"Achat effectué");
-						}else {
 
-							JOptionPane.showMessageDialog(null,"Impossible d'acheter une quantité negative");
+				String nom = (String) listMatierePremiere.getSelectedItem();
+				if (!textFieldQuantite.getText().equals("")) {
+					try {
+						String requete = "SELECT quantite FROM matierepremiere WHERE nom='" + nom + "'";
+						ResultSet résultats = null;
+						Statement stmt = con.con.createStatement();
+						résultats = stmt.executeQuery(requete);
+						int quantiteDB = 0;
+						while (résultats.next()) {
+							quantiteDB = résultats.getInt("quantite");
 						}
-					}catch (Exception e1) {
+						int intQuantite = Integer.parseInt(textFieldQuantite.getText()) + quantiteDB;
+						if (Integer.parseInt(textFieldQuantite.getText()) > 0) {
+							PreparedStatement pst;
+							pst = con.mkDataBase().prepareStatement(
+									"UPDATE matierepremiere SET quantite=" + intQuantite + " WHERE nom='" + nom + "'");
+							pst.execute();
+							JOptionPane.showMessageDialog(null, "Achat effectué");
+						} else {
+
+							JOptionPane.showMessageDialog(null, "Impossible d'acheter une quantité negative");
+						}
+					} catch (Exception e1) {
 						System.out.println(e1.getMessage());
 					}
-				}else {
-					JOptionPane.showMessageDialog(null,"Insérer une quantité à acheter");
+				} else {
+					JOptionPane.showMessageDialog(null, "Insérer une quantité à acheter");
 				}
 			}
 		});
-		
+
+		JButton newMatierePremiere = new JButton("Gérer matière première");
+		newMatierePremiere.setSize(40, 50);
+		newMatierePremiere.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buyFrame.dispose();
+				newMatierePremiere();
+			}
+		});
 
 		JButton back = new JButton("Retour à la visualisation");
 		back.setSize(40, 50);
@@ -150,11 +142,136 @@ public class Stock {
 		jp.add(quantite);
 		jp.add(textFieldQuantite);
 		jp.add(buy);
+		jp.add(newMatierePremiere);
 		jp.setSize(500, 500);
 		jp.setLayout(experimentLayout);
 		buyFrame.add(back);
 		controlPanel.add(jp);
+		
+		buyFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent windowEvent) {
+				new Stock();
+			}
+		});
 
+	}
+
+	public JComboBox<String> getListMatierePremiere(JComboBox<String> list) {
+
+		ResultSet résultats = null;
+		String requete = "SELECT nom FROM matierepremiere";
+		try {
+			Statement stmt = con.con.createStatement();
+			résultats = stmt.executeQuery(requete);
+			while (résultats.next()) {
+				String name = résultats.getString("nom");
+				list.addItem(name);
+			}
+			résultats.close();
+			stmt.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		return list;
+	}
+
+	public void newMatierePremiere() {
+		manageFrame = new JFrame("gérer");
+		manageFrame.setSize(600, 400);
+		manageFrame.setLayout(new GridLayout(3, 1));
+		manageFrame.getContentPane().setBackground(Color.gray);
+
+		headerLabel = new JLabel("Créer/Modifier matière première", JLabel.CENTER);
+		headerLabel.setFont(new Font(null, Font.BOLD, 27));
+		headerLabel.setForeground(Color.white);
+		controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
+		manageFrame.setLocationRelativeTo(null);
+		manageFrame.add(headerLabel);
+		manageFrame.add(controlPanel);
+		manageFrame.setVisible(true);
+
+		JLabel nom = new JLabel(" Entrer nom ");
+		final JTextField nomMatierePremiere = new JTextField();
+		nomMatierePremiere.setSize(100, 40);
+		
+		JComboBox<String> list = new JComboBox<String>();
+		list.addItem("");
+		JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
+
+		JButton modif = new JButton("Créer");
+		modif.setSize(40, 50);
+		modif.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				if (listMatierePremiere.getSelectedItem().toString().equals("")) {
+					// Requete de création
+					PreparedStatement pst;
+					try {
+						pst = con.mkDataBase().prepareStatement("INSERT INTO matierepremiere (nom, quantite) values (?,0)");
+						pst.setString(1, nomMatierePremiere.getText());
+						pst.execute();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					JOptionPane.showMessageDialog(null, "Création effectué");
+					
+					
+				} else {
+					// Requete de modification
+					PreparedStatement pst;
+					try {
+						pst = con.mkDataBase().prepareStatement("UPDATE matierepremiere SET nom='"+nomMatierePremiere.getText()+"' WHERE nom='"+listMatierePremiere.getSelectedItem().toString()+"'");
+						pst.execute();
+						JOptionPane.showMessageDialog(null, "Modification effectué");
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+				}
+				manageFrame.dispose();
+				BuyStock();
+				
+				
+			}
+		});
+
+		
+
+		// Lorsqu'on change la selection de la matière première
+		listMatierePremiere.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Si aucune matière première n'est sélectionné
+				if (listMatierePremiere.getSelectedItem().toString().equals("")) {
+					nomMatierePremiere.setText("");
+					modif.setText("Créer");
+				} else {
+					nomMatierePremiere.setText((String) listMatierePremiere.getSelectedItem());
+					modif.setText("Modifier");
+				}
+			}
+		});
+
+		JPanel jp = new JPanel(null);
+		jp.add(listMatierePremiere);
+		jp.add(nom);
+		jp.add(nomMatierePremiere);
+		jp.add(modif);
+		jp.setSize(500, 500);
+		jp.setLayout(experimentLayout);
+		controlPanel.add(jp);
+		
+		manageFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent windowEvent) {
+				BuyStock();
+			}
+		});
 	}
 
 	public String[][] getData() {
@@ -185,7 +302,6 @@ public class Stock {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-
 		return donnees;
 	}
 
