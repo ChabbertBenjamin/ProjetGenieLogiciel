@@ -128,13 +128,16 @@ public class Frame1 extends JFrame {
 				} else if (role.equals("maitre d hôtel")) {
 					InterfaceMaitreDhotel fn = new InterfaceMaitreDhotel();
 					fn.showButtonDemo();
+				} else if (role.equals("assistant service")) {
+					InterfaceAssistantService fn = new InterfaceAssistantService();
+					fn.showButtonDemo();
 				}
 			}else {
 				JOptionPane.showMessageDialog(null, "Invalid identifiant");
 			}
 
 		} catch (SQLException e) {
-
+			System.out.println(e.getMessage());
 		}
 	}
 

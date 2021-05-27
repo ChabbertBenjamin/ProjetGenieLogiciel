@@ -1,6 +1,6 @@
 package testUnitaire;
 import App.DBConnection;
-import App.Stock;
+import App.InterfaceAssistantService;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,7 +10,7 @@ import java.sql.Statement;
 import javax.swing.JComboBox;
 import org.junit.Test;
 
-public class StockTest {
+public class TestTableAssistantService {
 	
 	@Test
 	public void getDataTest() {
@@ -20,7 +20,7 @@ public class StockTest {
 		Statement stmt;
 		try {
 			stmt = con.con.createStatement();
-			rs = stmt.executeQuery("SELECT count(*) AS nbLignes FROM matierepremiere");
+			rs = stmt.executeQuery("SELECT count(*) AS nbLignes FROM tables");
 			rs.next();
 			nbLignes = rs.getInt("nbLignes");
 			rs.close();
@@ -29,8 +29,8 @@ public class StockTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		Stock s = new Stock();
-		String[][] resultat = s.getData();
+		InterfaceAssistantService as = new InterfaceAssistantService();
+		String[][] resultat = as.getData();
 		int test = resultat.length;
 		assertEquals(test,nbLignes);
 	}
@@ -44,9 +44,9 @@ public class StockTest {
 		JComboBox<String> list = new JComboBox<String>();
 		try {
 			stmt = con.con.createStatement();
-			rs = stmt.executeQuery("SELECT nom FROM matierepremiere");
+			rs = stmt.executeQuery("SELECT idTable FROM tables WHERE statut='sale'");
 			while (rs.next()) {
-				String name = rs.getString("nom");
+				String name = rs.getString("idTable");
 				list.addItem(name);
 			}
 			rs.close();
@@ -55,8 +55,8 @@ public class StockTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		Stock s = new Stock();
-		JComboBox<String> resultat = s.getListMatierePremiere(new JComboBox<String>());
+		InterfaceAssistantService as = new InterfaceAssistantService();
+		JComboBox<String> resultat = as.getListTableToSet(new JComboBox<String>());
 		assertNotNull(resultat);
 		assertEquals(resultat.getItemCount(),list.getItemCount());
 
