@@ -65,10 +65,8 @@ public class InterfaceDirecteur {
 		
 		fkButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Stock st = new Stock();
-				st.showButtonDemo();
+				new Stock();
 			}
-
 		});
 
 		billButton.addActionListener(new ActionListener() {
