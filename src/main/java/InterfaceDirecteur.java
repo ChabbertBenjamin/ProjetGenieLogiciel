@@ -8,103 +8,91 @@ import java.awt.Color;
 
 public class InterfaceDirecteur {
 
-   private JFrame mainFrame;
-   private JLabel headerLabel;
-   private JLabel statusLabel;
-   private JPanel controlPanel;
-   
+	private JFrame mainFrame;
+	private JLabel headerLabel;
+	private JLabel statusLabel;
+	private JPanel controlPanel;
 
-   public InterfaceDirecteur(){
-	
-	
-      prepareGUI();
-		
-   }
+	public InterfaceDirecteur() {
 
-   public static void main(String[] args){
-	  InterfaceDirecteur  swingControlDemo = new InterfaceDirecteur();
-      swingControlDemo.showButtonDemo();
-	  
-   }
+		prepareGUI();
 
-   private void prepareGUI(){
-      mainFrame = new JFrame("Directeur");
-      mainFrame.setBounds(100,100,700,400);
-      mainFrame.setLayout(new GridLayout(3,1));
-	  
-	 mainFrame.getContentPane().setBackground(Color.orange);
-	
-	 
-	  
-      mainFrame.addWindowListener(new WindowAdapter() {
-         public void windowClosing(WindowEvent windowEvent){
-            System.exit(0);
-		
-		
-         }
-      });
-      headerLabel = new JLabel("", JLabel.CENTER);
-      statusLabel = new JLabel("",JLabel.CENTER);
+	}
 
-      statusLabel.setSize(350,300);
+	public static void main(String[] args) {
+		InterfaceDirecteur swingControlDemo = new InterfaceDirecteur();
+		swingControlDemo.showButtonDemo();
 
-      controlPanel = new JPanel();
-      controlPanel.setLayout(new GridLayout(1,5));
-	  
-	 
-      mainFrame.add(headerLabel);
-      mainFrame.add(controlPanel);
-      mainFrame.add(statusLabel);
-      mainFrame.setVisible(true);
-	 
-   }
+	}
 
+	private void prepareGUI() {
+		mainFrame = new JFrame("Directeur");
+		mainFrame.setBounds(100, 100, 700, 400);
+		mainFrame.setLayout(new GridLayout(3, 1));
 
-   public void showButtonDemo(){
+		mainFrame.getContentPane().setBackground(Color.orange);
+
+		mainFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent windowEvent) {
+				System.exit(0);
+			}
+		});
+		headerLabel = new JLabel("", JLabel.CENTER);
+		statusLabel = new JLabel("", JLabel.CENTER);
+
+		statusLabel.setSize(350, 300);
+
+		controlPanel = new JPanel();
+		controlPanel.setLayout(new GridLayout(1, 5));
+
+		mainFrame.add(headerLabel);
+		mainFrame.add(controlPanel);
+		mainFrame.add(statusLabel);
+		mainFrame.setVisible(true);
+
+	}
+
+	public void showButtonDemo() {
 
 		headerLabel.setText("Directeur");
 		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
 		headerLabel.setForeground(Color.white);
-		
-		
+
 		JButton fkButton = new JButton("Stocks");
 		JButton billButton = new JButton("Gerer carte du jour");
 		JButton afButton = new JButton("Gerer employé");
 		JButton dlButton = new JButton("Analyse des ventes ");
-
 		
-        billButton.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e)
-{
-            
+		fkButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Stock st = new Stock();
+				st.showButtonDemo();
+			}
 
-        	 GererCarteDuJour gb=new GererCarteDuJour();}
+		});
 
-});
+		billButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GererCarteDuJour gb = new GererCarteDuJour();
+			}
 
+		});
 
+		afButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GestionEmploye ef = new GestionEmploye();
+				ef.showButtonDemo();
+			}
+		});
 
-      afButton.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e)
-{
-            
+		controlPanel.add(fkButton);
+		controlPanel.add(afButton);
+		controlPanel.add(billButton);
+		controlPanel.add(dlButton);
 
-            GestionEmploye ef=new GestionEmploye();
-            ef.showButtonDemo();
-         }
-});
+		mainFrame.setVisible(true);
+		mainFrame.setLocationRelativeTo(null);
 
+	}
 
-	  controlPanel.add(fkButton);
-      controlPanel.add(afButton);
-	  controlPanel.add(billButton);
-	  controlPanel.add(dlButton);
-
-		  
-      mainFrame.setVisible(true);
-	  mainFrame.setLocationRelativeTo(null);
-	  
-   }
-   
-   
 }
