@@ -66,7 +66,7 @@ public class Frame1 extends JFrame {
 		add(passwordLabel);
 
 		devInfo = new JLabel();
-		this.devInfo.setText("© all Rights Reserved by   -  Aichetou    ||    ");
+		this.devInfo.setText("Â© all Rights Reserved by   -  Aichetou    ||    ");
 		this.devInfo.setBounds(130, 300, 1000, 30);
 		this.devInfo.setFont(new Font("Geomanist", Font.PLAIN, 15));
 		devInfo.setForeground(Color.white);
@@ -92,18 +92,18 @@ public class Frame1 extends JFrame {
 
 	public void submitActionPerformed(java.awt.event.ActionEvent evt) {
 		DBConnection con = new DBConnection();
-		ResultSet résultats = null;
+		ResultSet rÃ©sultats = null;
 		String requete = "SELECT login, motdepasse,role FROM employe WHERE login='" + id.getText() + "'";
 		Boolean connect = false;
 		try {
 			Statement stmt = con.con.createStatement();
-			résultats = stmt.executeQuery(requete);
+			rÃ©sultats = stmt.executeQuery(requete);
 			String role = null;
-			while (résultats.next() && !connect) {
-				String login = résultats.getString("login");
-				String password = résultats.getString("motdepasse");
-				role = résultats.getString("role");
-				// Si l'identifiant et le mot de passe correcsponde à un compte
+			while (rÃ©sultats.next() && !connect) {
+				String login = rÃ©sultats.getString("login");
+				String password = rÃ©sultats.getString("motdepasse");
+				role = rÃ©sultats.getString("role");
+				// Si l'identifiant et le mot de passe correcsponde Ã  un compte
 				if (id.getText().equals(login) && this.password.getText().equals(password)) {
 					connect = true;
 				}
@@ -122,6 +122,9 @@ public class Frame1 extends JFrame {
 
 				} else if (role.equals("cuisinier")) {
 					InterfaceCuisinier fn = new InterfaceCuisinier();
+					fn.showButtonDemo();
+				} else if (role.equals("maitre d hÃ´tel")) {
+					InterfaceMaitreDhotel fn = new InterfaceMaitreDhotel();
 					fn.showButtonDemo();
 				}
 			}else {
