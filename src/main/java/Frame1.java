@@ -98,6 +98,7 @@ public class Frame1 extends JFrame {
 		try {
 			Statement stmt = con.con.createStatement();
 			resultats = stmt.executeQuery(requete);
+
 			String role = null;
 			while (resultats.next() && !connect) {
 				String login = resultats.getString("login");
@@ -123,7 +124,7 @@ public class Frame1 extends JFrame {
 				} else if (role.equals("cuisinier")) {
 					InterfaceCuisinier fn = new InterfaceCuisinier();
 					fn.showButtonDemo();
-				} else if (role.equals("maitre d hÃ´tel")) {
+				} else if (role.equals("maitre d hôtel")) {
 					InterfaceMaitreDhotel fn = new InterfaceMaitreDhotel();
 					fn.showButtonDemo();
 				}

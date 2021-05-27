@@ -48,7 +48,7 @@ public class CreationEmploye {
 			}
 		});
 		headerLabel = new JLabel("Creation d'un employé", JLabel.CENTER);
-		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
+		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 		headerLabel.setForeground(Color.white);
 		controlPanel = new JPanel();
 		controlPanel.setLayout(new FlowLayout());
@@ -296,9 +296,9 @@ public class CreationEmploye {
 		jp.add(listEmploye);
 		jp.setSize(500, 500);
 		jp.setLayout(experimentLayout);
-		controlPanel.add(jp);
 		jp.add(okButton);
 		jp.add(deleteButton);
+		controlPanel.add(jp);
 		deleteButton.setVisible(false);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
