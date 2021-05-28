@@ -21,7 +21,7 @@ public class DetailTable {
 	   private JLabel headerLabel;
 	   private JPanel controlPanel;	
 	   private JLabel  lidTable,lstatut,lnbcouverts,letage,lidEmploye;
-	   private JButton btnRetour,btnAjout;
+	   private JButton btnRetour,btnAjout,btnReserve;
 	   GridLayout experimentLayout = new GridLayout(0,2);
 	public DetailTable(){
 
@@ -60,6 +60,7 @@ public class DetailTable {
 	        lidEmploye = new JLabel("Employé(e) affecté(e) : "+table.getIdemploye());
 	        btnRetour = new JButton("Retour");
 	        btnAjout = new JButton("Saisir une commande");
+	        btnReserve = new JButton("Reserver la table");
 	        
 	        
 	        JPanel jp = new JPanel(null);
@@ -70,7 +71,14 @@ public class DetailTable {
 	        jp.add(lidEmploye);
 	        jp.add(btnRetour);
 	        jp.add(btnAjout);
-	        
+	        jp.add(btnReserve);
+	        if(table.getStatut().equals("occupe")) {
+	        	btnAjout.setVisible(true);
+	        	btnReserve.setVisible(false);
+	        }else {
+	        btnAjout.setVisible(false);
+	        btnReserve.setVisible(true);
+	        }
 	        jp.setSize(500,500);
 	        jp.setLayout(experimentLayout);
 	        controlPanel.add(jp);
