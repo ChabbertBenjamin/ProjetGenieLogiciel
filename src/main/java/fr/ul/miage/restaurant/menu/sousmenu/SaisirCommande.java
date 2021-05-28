@@ -49,7 +49,7 @@ public class SaisirCommande {
 
    public void showButtonDemo(){
 
-		headerLabel.setText("Détails de la table");
+		headerLabel.setText("Saisir une commande");
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 
         idcommande = new JLabel("Entrer id commande");

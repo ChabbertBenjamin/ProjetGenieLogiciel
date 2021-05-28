@@ -2,7 +2,10 @@ package fr.ul.miage.restaurant.menu;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -11,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,8 +22,6 @@ import javax.swing.JPanel;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
 import fr.ul.miage.restaurant.menu.sousmenu.DetailTable;
-import fr.ul.miage.restaurant.menu.sousmenu.ModifierCommande;
-import fr.ul.miage.restaurant.menu.sousmenu.SaisirCommande;
 import fr.ul.miage.restaurant.models.Table;
 
 public class InterfaceServeur {
@@ -46,7 +48,7 @@ public class InterfaceServeur {
       
       
 
-	 mainFrame.getContentPane().setBackground(Color.orange);
+	 mainFrame.getContentPane().setBackground(Color.GRAY);
 	
 	 
 	  
@@ -63,9 +65,7 @@ public class InterfaceServeur {
       statusLabel.setSize(350,300);
 
       controlPanel = new JPanel();
-      controlPanel.setLayout(new GridLayout(1,5));
-	  
-	 
+      controlPanel.setSize(500,500);;
       mainFrame.add(headerLabel);
       mainFrame.add(controlPanel);
       mainFrame.add(statusLabel);
@@ -79,7 +79,13 @@ public class InterfaceServeur {
 		headerLabel.setText("Serveur");
 		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
 		headerLabel.setForeground(Color.white);
-		
+		controlPanel.setLayout(new GridBagLayout());
+		  GridBagConstraints c = new GridBagConstraints();
+		  c.weightx = 1;
+	      c.weighty = .25;
+	      c.insets = new Insets(3, 0, 3, 0);
+	      c.gridwidth = GridBagConstraints.REMAINDER;
+	      c.fill = GridBagConstraints.BOTH;
        
 		 
         try{	
@@ -92,6 +98,7 @@ public class InterfaceServeur {
              while (rs.next()){
             	listeTable.add(new Table(rs.getInt("idtable"),rs.getString("statut"),rs.getInt("nbcouverts"),rs.getInt("etage"),rs.getInt("idemploye")));
             	JButton buttonTable = new JButton("Table numéro : "+rs.getInt("idtable"));
+            
             	if(rs.getString("statut").equals("propre")) {
             	buttonTable.setBackground(Color.GREEN);
             	}
@@ -104,8 +111,12 @@ public class InterfaceServeur {
             	if(rs.getString("statut").equals("reserve")) {
                 	buttonTable.setBackground(Color.ORANGE);
             	}
+            	
+                buttonTable.setBorder(BorderFactory.createBevelBorder(0));
                 listButton.add(buttonTable);	
-            	controlPanel.add(buttonTable);
+           
+            	controlPanel.add(buttonTable,c);
+     
             	i++;
             	buttonTable.addActionListener(new ActionListener() {
        	         public void actionPerformed(ActionEvent e)
@@ -119,12 +130,7 @@ public class InterfaceServeur {
        	});
             	  
              }
-             for(int j=0; j < listButton.size();j++){
-            	 
-            	 controlPanel.add(listButton.get(j));
-            	
-             }
-             
+        
            
        
    
@@ -136,38 +142,7 @@ public class InterfaceServeur {
    
         
          
-		
-		
-		JButton billButton = new JButton("Saisir la commande");
-		
-		JButton afButton = new JButton("Modifier une commande");
-		
-        billButton.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e)
-{
-            
 
-        	 SaisirCommande gb=new SaisirCommande();
-        	 gb.showButtonDemo();}
-
-});
-
-
-        
-      afButton.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e)
-{
-            
-
-            ModifierCommande ef=new ModifierCommande();
-            //ef.showButtonDemo();
-         }
-});
-
-
-      //controlPanel.add(afButton);
-	  //controlPanel.add(billButton);
-	  //controlPanel.add(dlButton);
 
 		  
       mainFrame.setVisible(true);

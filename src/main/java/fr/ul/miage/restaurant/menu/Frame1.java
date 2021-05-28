@@ -97,7 +97,7 @@ public class Frame1 extends JFrame {
 	public void submitActionPerformed(java.awt.event.ActionEvent evt) {
 		DBConnection con = new DBConnection();
 		ResultSet resultats = null;
-		String requete = "SELECT login, motdepasse,role,idemploye FROM employe WHERE login='" + id.getText() + "'";
+		String requete = "SELECT login, motdepasse,role, idemploye FROM employe WHERE login='" + id.getText() + "'";
 		Boolean connect = false;
 		int idemploye = -1;
 		try {
