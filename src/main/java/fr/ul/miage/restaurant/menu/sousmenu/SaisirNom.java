@@ -1,7 +1,10 @@
-package App;
+package fr.ul.miage.restaurant.menu.sousmenu;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -21,10 +24,6 @@ public class SaisirNom {
     prepareGUI();
    }
 
-   public static void main(String[] args){
-	   SaisirNom  swingControlDemo = new SaisirNom();
-      swingControlDemo.showButtonDemo();
-   }
 
    private void prepareGUI(){
       mainFrame = new JFrame("Saisir votre nom");

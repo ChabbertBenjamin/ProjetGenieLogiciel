@@ -1,19 +1,24 @@
-package App;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.html.ListView;
-
+package fr.ul.miage.restaurant.menu;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.menu.sousmenu.ModifierCommande;
+import fr.ul.miage.restaurant.menu.sousmenu.SaisirCommande;
 
 public class InterfaceServeur {
 
@@ -38,12 +43,6 @@ public class InterfaceServeur {
 	
       prepareGUI();
 		
-   }
-
-   public static void main(String[] args){
-	   InterfaceServeur  swingControlDemo = new InterfaceServeur();
-      swingControlDemo.showButtonDemo();
-	  
    }
 
    private void prepareGUI(){

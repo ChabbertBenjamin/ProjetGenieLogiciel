@@ -1,4 +1,4 @@
-package App;
+package fr.ul.miage.restaurant.models;
 
 public class Plat {
 	private int idplat;

@@ -1,4 +1,4 @@
-package App;
+package fr.ul.miage.restaurant.menu.sousmenu;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import java.awt.*;
@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
 
 public class VisualiserCommande extends JFrame{
 
@@ -25,7 +27,7 @@ public class VisualiserCommande extends JFrame{
    double totalprice = 0;
     ArrayList<commandeCart> commandeList = new ArrayList<>();
 
-    VisualiserCommande(){
+    public VisualiserCommande(){
    
        JPanel jp2 = new JPanel();
        jp2.setSize(700, 400);

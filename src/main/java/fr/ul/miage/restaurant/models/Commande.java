@@ -1,4 +1,4 @@
-package App;
+package fr.ul.miage.restaurant.models;
 
 public class Commande {
 	private int idcommande;

@@ -1,7 +1,10 @@
-package App;
+package fr.ul.miage.restaurant.menu.sousmenu;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,15 +20,11 @@ public class AffecterServeur {
 
 	private DBConnection con;
 
-	AffecterServeur() {
+	public AffecterServeur() {
 		this.con = new DBConnection();
 		prepareGUI();
 	}
 
-	public static void main(String[] args) {
-		AffecterServeur swingControlDemo = new AffecterServeur();
-		swingControlDemo.showButtonDemo();
-	}
 
 	private void prepareGUI() {
 		mainFrame = new JFrame("Affecter serveur!");

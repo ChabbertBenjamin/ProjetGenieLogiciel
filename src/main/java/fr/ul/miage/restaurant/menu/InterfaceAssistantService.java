@@ -1,14 +1,28 @@
-package App;
+package fr.ul.miage.restaurant.menu;
 
-import java.awt.*;
-
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
 
 public class InterfaceAssistantService {
 
@@ -26,11 +40,7 @@ public class InterfaceAssistantService {
 
 	}
 
-	public static void main(String[] args) {
-		InterfaceMaitreDhotel swingControlDemo = new InterfaceMaitreDhotel();
-		swingControlDemo.showButtonDemo();
 
-	}
 
 	private void prepareGUI() {
 		mainFrame = new JFrame("Assistant de service");
@@ -119,16 +129,16 @@ public class InterfaceAssistantService {
 
 	public JComboBox<String> getListTableToSet(JComboBox<String> list) {
 
-		ResultSet résultats = null;
+		ResultSet rs = null;
 		String requete = "SELECT idTable FROM tables WHERE statut='sale'";
 		try {
 			Statement stmt = con.con.createStatement();
-			résultats = stmt.executeQuery(requete);
-			while (résultats.next()) {
-				String id = résultats.getString("idTable");
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+				String id = rs.getString("idTable");
 				list.addItem(id);
 			}
-			résultats.close();
+			rs.close();
 			stmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -143,7 +153,7 @@ public class InterfaceAssistantService {
 		JPanel jp = new JPanel();
 		jp.setSize(400, 400);
 
-		String[] columnNames = { "Numéro table ", "statut", "nombre de couverts", "étage" };
+		String[] columnNames = { "NumÃ©ro table ", "statut", "nombre de couverts", "Ã©tage" };
 		String[][] donnees = getData();
 		cart = new JTable(donnees, columnNames);
 		cart.setSize(300, 450);
@@ -155,20 +165,20 @@ public class InterfaceAssistantService {
 		list.addItem("");
 		JComboBox<String> listTableToSet = getListTableToSet(list);
 
-		JButton setTable = new JButton("Dresser la table sélectionné");
+		JButton setTable = new JButton("Dresser la table sÃ©lectionnÃ©");
 		setTable.setSize(40, 50);
 
 		setTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (listTableToSet.getSelectedItem().equals("")) {
-					JOptionPane.showMessageDialog(null, "Vous devez séléctionné une table");
+					JOptionPane.showMessageDialog(null, "Vous devez sÃ©lÃ©ctionnÃ© une table");
 				} else {
 					PreparedStatement pst;
 					try {
 						pst = con.mkDataBase().prepareStatement("UPDATE tables SET statut='propre' WHERE idTable="
 								+ listTableToSet.getSelectedItem().toString());
 						pst.execute();
-						JOptionPane.showMessageDialog(null, "Table dressé !");
+						JOptionPane.showMessageDialog(null, "Table dressÃ© !");
 						mainFrame.dispose();
 						seeTable();
 					} catch (SQLException e1) {

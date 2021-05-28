@@ -1,11 +1,20 @@
-package App;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
+package fr.ul.miage.restaurant.menu;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import fr.ul.miage.restaurant.menu.sousmenu.GererCarteDuJour;
+import fr.ul.miage.restaurant.menu.sousmenu.GestionEmploye;
+import fr.ul.miage.restaurant.menu.sousmenu.Stock;
 
 public class InterfaceDirecteur {
 
@@ -20,11 +29,6 @@ public class InterfaceDirecteur {
 
 	}
 
-	public static void main(String[] args) {
-		InterfaceDirecteur swingControlDemo = new InterfaceDirecteur();
-		swingControlDemo.showButtonDemo();
-
-	}
 
 	private void prepareGUI() {
 		mainFrame = new JFrame("Directeur");
@@ -61,7 +65,7 @@ public class InterfaceDirecteur {
 
 		JButton fkButton = new JButton("Stocks");
 		JButton billButton = new JButton("Gerer carte du jour");
-		JButton afButton = new JButton("Gerer employé");
+		JButton afButton = new JButton("Gerer employÃ©");
 		JButton dlButton = new JButton("Analyse des ventes ");
 		
 		fkButton.addActionListener(new ActionListener() {

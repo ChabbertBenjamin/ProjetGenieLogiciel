@@ -1,4 +1,4 @@
-package App;
+package fr.ul.miage.restaurant.menu.sousmenu;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addActionListener;
 import java.awt.*;
@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import fr.ul.miage.restaurant.bdd.DBConnection;
+
 public class GererCarteDuJour extends JFrame {
 	JTextField idplat, prix;
 	String[] columnNames = { "id du plat  ", "  Prix  " };
@@ -18,7 +20,7 @@ public class GererCarteDuJour extends JFrame {
 	int i = 0;
 	ArrayList<cartedujourCart> cartedujourList = new ArrayList<>();
 
-	GererCarteDuJour() {
+	public GererCarteDuJour() {
 		JPanel jp2 = new JPanel();
 		jp2.setSize(400, 400);
 

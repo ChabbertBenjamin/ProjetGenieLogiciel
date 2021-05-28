@@ -1,33 +1,32 @@
-package App;
+package fr.ul.miage.restaurant.menu.sousmenu;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 
-public class SaisirCommande {
+public class DefinirPlat {
 
    private JFrame mainFrame;
    private JLabel headerLabel;
    private JPanel controlPanel;
-   private JLabel idcommande,idplat,statut,dateheurecommande,idtable;
+   private JLabel idplat, idcategorie, prix, idmatierepremiere;
    GridLayout experimentLayout = new GridLayout(0,2);
-    ResultSet rs;
+   ResultSet rs;
 
-    SaisirCommande(){
+    public DefinirPlat(){
 
 
     prepareGUI();
    }
 
-   public static void main(String[] args){
-      GestionEmploye  swingControlDemo = new GestionEmploye();
-      swingControlDemo.showButtonDemo();
-   }
 
    private void prepareGUI(){
-      mainFrame = new JFrame("Saisir commande");
+      mainFrame = new JFrame("Definir un plat");
       mainFrame.setSize(700,600);
       mainFrame.setLayout(new GridLayout(3, 1));
 	  
@@ -51,28 +50,24 @@ public class SaisirCommande {
 
    public void showButtonDemo(){
 
-		headerLabel.setText("Saisir une commande");
+		headerLabel.setText("Definir un plat");
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 
-        idcommande = new JLabel("Entrer id commande");
+        idplat = new JLabel("Entrer id du plat");
         final JTextField tf2=new JTextField();
         tf2.setSize(100,40);
 
-        idplat = new JLabel("Entrer id plat");
+        idcategorie = new JLabel("Entrer id de la categorie");
         final JTextField tf3=new JTextField();
         tf3.setSize(100,40);
 
-        statut = new JLabel("Entrer statut");
+        prix = new JLabel("Entrer le prix du plat");
         final JTextField tf4=new JTextField();
         tf4.setSize(100,40);
         
-        dateheurecommande = new JLabel("Entrer date et heure de la commande");
+        idmatierepremiere = new JLabel("Entrer id matiere premiere");
         final JTextField tf5=new JTextField();
         tf5.setSize(100,40);
-        
-        idtable = new JLabel("Entrer id de la table");
-        final JTextField tf6=new JTextField();
-        tf6.setSize(100,40);
         
         JButton okButton = new JButton("OK");
 
@@ -82,12 +77,11 @@ public class SaisirCommande {
             PreparedStatement pst;
             DBConnection con = new DBConnection();
             try{
-                pst = con.mkDataBase().prepareStatement("insert into Projet_GL.commande(idcommande,idplat,statut,dateheurecommande,idtable) values (?,?,?,?,?)");
+                pst = con.mkDataBase().prepareStatement("insert into Projet_GL.plat(idplat, idcategorie, prix, idmatierepremiere) values (?,?,?,?)");
                 pst.setInt(1, Integer.parseInt(tf2.getText()));
                 pst.setInt(2, Integer.parseInt(tf3.getText()));
-                pst.setString(3, tf4.getText());
-                pst.setString(4, tf5.getText());
-                pst.setInt(5, Integer.parseInt(tf6.getText()));
+                pst.setInt(3, Integer.parseInt(tf4.getText()));
+                pst.setInt(4, Integer.parseInt(tf5.getText()));
                 pst.execute();
 
                 JOptionPane.showMessageDialog(null, "Done Inserting " + tf2.getText());
@@ -106,16 +100,14 @@ public class SaisirCommande {
 
 
       JPanel jp = new JPanel(null);
-      jp.add(idcommande);
-      jp.add(tf2);
       jp.add(idplat);
+      jp.add(tf2);
+      jp.add(idcategorie);
       jp.add(tf3);
-      jp.add(statut);
+      jp.add(prix);
       jp.add(tf4);
-      jp.add(dateheurecommande);
+      jp.add(idmatierepremiere);
       jp.add(tf5);
-      jp.add(idtable);
-      jp.add(tf6);
       
       jp.setSize(500,500);
       jp.setLayout(experimentLayout);
@@ -127,3 +119,4 @@ public class SaisirCommande {
       mainFrame.setVisible(true);
    }
 }
+

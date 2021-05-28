@@ -1,7 +1,10 @@
-package App;
+package fr.ul.miage.restaurant.menu.sousmenu;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,18 +20,14 @@ public class GestionEmploye {
 
 	private DBConnection con;
 
-	GestionEmploye() {
+	public GestionEmploye() {
 		this.con = new DBConnection();
 		prepareGUI();
 	}
 
-	public static void main(String[] args) {
-		GestionEmploye swingControlDemo = new GestionEmploye();
-		swingControlDemo.showButtonDemo();
-	}
 
 	private void prepareGUI() {
-		mainFrame = new JFrame("Gestion employé!");
+		mainFrame = new JFrame("Gestion employÃ©!");
 		mainFrame.setSize(700, 600);
 		mainFrame.setLayout(new GridLayout(3, 1));
 
@@ -69,7 +68,7 @@ public class GestionEmploye {
 		tf3.setSize(100, 40);
 
 		JButton okButton = new JButton("OK");
-		JButton create = new JButton("Créer/Modifier un compte");
+		JButton create = new JButton("CrÃ©er/Modifier un compte");
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

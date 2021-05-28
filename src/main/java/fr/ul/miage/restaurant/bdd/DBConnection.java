@@ -1,4 +1,4 @@
-package App;
+package fr.ul.miage.restaurant.bdd;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class DBConnection {
     }
     public Connection mkDataBase() throws SQLException{
         try {
-          //étape 1: charger la classe de driver
+          //Ã©tape 1: charger la classe de driver
             Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection(url, user, pass);
            

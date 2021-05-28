@@ -1,16 +1,20 @@
-package App;
+package fr.ul.miage.restaurant.menu;
 
-import java.awt.*;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.*;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
 
 public class Frame1 extends JFrame {
 
@@ -32,8 +36,7 @@ public class Frame1 extends JFrame {
 		setVisible(true);
 
 		// Background
-		this.background = new JLabel(new ImageIcon(
-				"C:\\Users\\Asus\\Downloads\\Java-Project-Final (1)\\Java Project Final\\image\\burger.jpg"));
+		//this.background = new JLabel(new ImageIcon("C:\\Users\\Asus\\Downloads\\Java-Project-Final (1)\\Java Project Final\\image\\burger.jpg"));
 
 		this.init();
 
@@ -67,7 +70,7 @@ public class Frame1 extends JFrame {
 		add(passwordLabel);
 
 		devInfo = new JLabel();
-		this.devInfo.setText("© all Rights Reserved by   -  Aichetou    ||    ");
+		this.devInfo.setText("© all Rights Reserved");
 		this.devInfo.setBounds(130, 300, 1000, 30);
 		this.devInfo.setFont(new Font("Geomanist", Font.PLAIN, 15));
 		devInfo.setForeground(Color.white);
@@ -76,9 +79,9 @@ public class Frame1 extends JFrame {
 		id = new JTextField();
 		this.id.setBounds(350, 125, 200, 30);
 		add(id);
-
-		password = new JTextField();
-		this.password.setBounds(350, 165, 200, 30);
+		
+		password = new JPasswordField();
+		password.setBounds(350, 165, 200, 30);
 		add(password);
 
 		this.id.setVisible(true);
@@ -125,7 +128,7 @@ public class Frame1 extends JFrame {
 				} else if (role.equals("cuisinier")) {
 					InterfaceCuisinier fn = new InterfaceCuisinier();
 					fn.showButtonDemo();
-				} else if (role.equals("maitre d h�tel")) {
+				} else if (role.equals("maitre d hôtel")) {
 					InterfaceMaitreDhotel fn = new InterfaceMaitreDhotel();
 					fn.showButtonDemo();
 				} else if (role.equals("assistant service")) {
@@ -140,13 +143,5 @@ public class Frame1 extends JFrame {
 			System.out.println(e.getMessage());
 		}
 	}
-
 }
 
-class MyGui {
-	public static void main(String[] a) {
-		Frame1 f = new Frame1();
-		f.setVisible(true);
-
-	}
-}

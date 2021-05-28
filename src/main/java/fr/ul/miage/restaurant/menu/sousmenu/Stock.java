@@ -1,4 +1,4 @@
-package App;
+package fr.ul.miage.restaurant.menu.sousmenu;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.*;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
 
 public class Stock {
 
@@ -33,7 +35,7 @@ public class Stock {
 		JPanel jp2 = new JPanel();
 		jp2.setSize(400, 400);
 
-		String[] columnNames = { "Nom ", "Quantité" };
+		String[] columnNames = { "Nom ", "QuantitÃ©" };
 		String[][] donnees = getData();
 		cart = new JTable(donnees, columnNames);
 		cart.setSize(300, 450);
@@ -42,7 +44,7 @@ public class Stock {
 		jp2.add(new JScrollPane(cart, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
-		JButton buy = new JButton("Acheter des matières premières");
+		JButton buy = new JButton("Acheter des matiÃ©res premiÃ©res");
 		buy.setSize(40, 50);
 		jp2.add(buy);
 
@@ -65,7 +67,7 @@ public class Stock {
 		buyFrame.setLayout(new GridLayout(3, 1));
 		buyFrame.getContentPane().setBackground(Color.gray);
 
-		headerLabel = new JLabel("Acheter matière première", JLabel.CENTER);
+		headerLabel = new JLabel("Acheter matiÃ©re premiÃ©re", JLabel.CENTER);
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 		headerLabel.setForeground(Color.white);
 		controlPanel = new JPanel();
@@ -75,11 +77,11 @@ public class Stock {
 		buyFrame.add(controlPanel);
 		buyFrame.setVisible(true);
 
-		// JComboBox pour sélectionner l'employé à modifier
+		// JComboBox pour sÃ©lectionner l'employÃ© Ã© modifier
 		JComboBox<String> list = new JComboBox<String>();
 		JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
 
-		JLabel quantite = new JLabel(" Entrer quantité ");
+		JLabel quantite = new JLabel(" Entrer quantitÃ© ");
 		final JTextField textFieldQuantite = new JTextField();
 		textFieldQuantite.setSize(100, 40);
 
@@ -93,12 +95,12 @@ public class Stock {
 				if (!textFieldQuantite.getText().equals("")) {
 					try {
 						String requete = "SELECT quantite FROM matierepremiere WHERE nom='" + nom + "'";
-						ResultSet résultats = null;
+						ResultSet rs = null;
 						Statement stmt = con.con.createStatement();
-						résultats = stmt.executeQuery(requete);
+						rs = stmt.executeQuery(requete);
 						int quantiteDB = 0;
-						while (résultats.next()) {
-							quantiteDB = résultats.getInt("quantite");
+						while (rs.next()) {
+							quantiteDB = rs.getInt("quantite");
 						}
 						int intQuantite = Integer.parseInt(textFieldQuantite.getText()) + quantiteDB;
 						if (Integer.parseInt(textFieldQuantite.getText()) > 0) {
@@ -106,21 +108,21 @@ public class Stock {
 							pst = con.mkDataBase().prepareStatement(
 									"UPDATE matierepremiere SET quantite=" + intQuantite + " WHERE nom='" + nom + "'");
 							pst.execute();
-							JOptionPane.showMessageDialog(null, "Achat effectué");
+							JOptionPane.showMessageDialog(null, "Achat effectuÃ©");
 						} else {
 
-							JOptionPane.showMessageDialog(null, "Impossible d'acheter une quantité negative");
+							JOptionPane.showMessageDialog(null, "Impossible d'acheter une quantitÃ© negative");
 						}
 					} catch (Exception e1) {
 						System.out.println(e1.getMessage());
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Insérer une quantité à acheter");
+					JOptionPane.showMessageDialog(null, "InsÃ©rer une quantitÃ© Ã© acheter");
 				}
 			}
 		});
 
-		JButton newMatierePremiere = new JButton("Gérer matière première");
+		JButton newMatierePremiere = new JButton("GÃ©rer matiÃ©re premiÃ©re");
 		newMatierePremiere.setSize(40, 50);
 		newMatierePremiere.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -129,7 +131,7 @@ public class Stock {
 			}
 		});
 
-		JButton back = new JButton("Retour à la visualisation");
+		JButton back = new JButton("Retour Ã© la visualisation");
 		back.setSize(40, 50);
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -159,16 +161,16 @@ public class Stock {
 
 	public JComboBox<String> getListMatierePremiere(JComboBox<String> list) {
 
-		ResultSet résultats = null;
+		ResultSet rs = null;
 		String requete = "SELECT nom FROM matierepremiere";
 		try {
 			Statement stmt = con.con.createStatement();
-			résultats = stmt.executeQuery(requete);
-			while (résultats.next()) {
-				String name = résultats.getString("nom");
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+				String name = rs.getString("nom");
 				list.addItem(name);
 			}
-			résultats.close();
+			rs.close();
 			stmt.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -178,12 +180,12 @@ public class Stock {
 	}
 
 	public void newMatierePremiere() {
-		manageFrame = new JFrame("gérer");
+		manageFrame = new JFrame("gÃ©rer");
 		manageFrame.setSize(600, 400);
 		manageFrame.setLayout(new GridLayout(3, 1));
 		manageFrame.getContentPane().setBackground(Color.gray);
 
-		headerLabel = new JLabel("Créer/Modifier matière première", JLabel.CENTER);
+		headerLabel = new JLabel("CrÃ©er/Modifier matiÃ©re premiÃ©re", JLabel.CENTER);
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 		headerLabel.setForeground(Color.white);
 		controlPanel = new JPanel();
@@ -201,14 +203,14 @@ public class Stock {
 		list.addItem("");
 		JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
 
-		JButton modif = new JButton("Créer");
+		JButton modif = new JButton("CrÃ©er");
 		modif.setSize(40, 50);
 		modif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				
 				if (listMatierePremiere.getSelectedItem().toString().equals("")) {
-					// Requete de création
+					// Requete de crÃ©ation
 					PreparedStatement pst;
 					try {
 						pst = con.mkDataBase().prepareStatement("INSERT INTO matierepremiere (nom, quantite) values (?,0)");
@@ -219,7 +221,7 @@ public class Stock {
 						e1.printStackTrace();
 					}
 					
-					JOptionPane.showMessageDialog(null, "Création effectué");
+					JOptionPane.showMessageDialog(null, "CrÃ©ation effectuÃ©");
 					
 					
 				} else {
@@ -228,7 +230,7 @@ public class Stock {
 					try {
 						pst = con.mkDataBase().prepareStatement("UPDATE matierepremiere SET nom='"+nomMatierePremiere.getText()+"' WHERE nom='"+listMatierePremiere.getSelectedItem().toString()+"'");
 						pst.execute();
-						JOptionPane.showMessageDialog(null, "Modification effectué");
+						JOptionPane.showMessageDialog(null, "Modification effectuÃ©");
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -245,13 +247,13 @@ public class Stock {
 
 		
 
-		// Lorsqu'on change la selection de la matière première
+		// Lorsqu'on change la selection de la matiÃ©re premiÃ©re
 		listMatierePremiere.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Si aucune matière première n'est sélectionné
+				// Si aucune matiÃ©re premiÃ©re n'est sÃ©lectionnÃ©
 				if (listMatierePremiere.getSelectedItem().toString().equals("")) {
 					nomMatierePremiere.setText("");
-					modif.setText("Créer");
+					modif.setText("CrÃ©er");
 				} else {
 					nomMatierePremiere.setText((String) listMatierePremiere.getSelectedItem());
 					modif.setText("Modifier");

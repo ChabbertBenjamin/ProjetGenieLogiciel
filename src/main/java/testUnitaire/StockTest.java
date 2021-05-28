@@ -1,6 +1,4 @@
 package testUnitaire;
-import App.DBConnection;
-import App.Stock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JComboBox;
 import org.junit.Test;
+
+import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.menu.sousmenu.Stock;
 
 public class StockTest {
 	

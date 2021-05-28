@@ -1,13 +1,21 @@
-package App;
-import java.awt.*;
-import java.awt.event.*;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.*;
+package fr.ul.miage.restaurant.menu;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class InterfaceCuisinier {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import fr.ul.miage.restaurant.menu.sousmenu.AffecterServeur;
+
+
+public class InterfaceMaitreDhotel {
 
    private JFrame mainFrame;
    private JLabel headerLabel;
@@ -15,21 +23,16 @@ public class InterfaceCuisinier {
    private JPanel controlPanel;
    
 
-   public InterfaceCuisinier(){
+   public InterfaceMaitreDhotel(){
 	
 	
       prepareGUI();
 		
    }
 
-   public static void main(String[] args){
-	   InterfaceCuisinier swingControlDemo = new InterfaceCuisinier();
-      swingControlDemo.showButtonDemo();
-	  
-   }
 
    private void prepareGUI(){
-      mainFrame = new JFrame("Cuisinier");
+      mainFrame = new JFrame("Maitre d hotel");
       mainFrame.setBounds(100,100,700,400);
       mainFrame.setLayout(new GridLayout(3,1));
 	  
@@ -63,41 +66,28 @@ public class InterfaceCuisinier {
 
    public void showButtonDemo(){
 
-		headerLabel.setText("Cuisinier");
+		headerLabel.setText("Maitre d hotel");
 		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
 		headerLabel.setForeground(Color.white);
 		
 		
-		JButton billButton = new JButton("Visualiser commandes");
-		JButton afButton = new JButton("Definir plat");
-		
+		JButton fkButton = new JButton("Affecter un serveur");
 
 		
-        billButton.addActionListener(new ActionListener() {
+        fkButton.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e)
 {
             
 
-        	 VisualiserCommande gb=new VisualiserCommande();}
-
+        	 AffecterServeur gb=new AffecterServeur();
+        	 gb.showButtonDemo();}
+         	 
 });
 
 
-        
-      afButton.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e)
-{
-            
-
-            DefinirPlat ef=new DefinirPlat();
-            ef.showButtonDemo();
-         }
-});
 
 
-      controlPanel.add(afButton);
-	  controlPanel.add(billButton);
-
+	  controlPanel.add(fkButton);
 
 		  
       mainFrame.setVisible(true);
