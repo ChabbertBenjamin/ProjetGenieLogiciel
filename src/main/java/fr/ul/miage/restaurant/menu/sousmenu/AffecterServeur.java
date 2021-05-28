@@ -8,13 +8,14 @@ import fr.ul.miage.restaurant.bdd.DBConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class AffecterServeur {
 
 	private JFrame mainFrame;
 	private JLabel headerLabel;
 	private JPanel controlPanel;
-	private JLabel idtable, idemploye;
+	private JLabel JLabelidTable, idemploye;
 	GridLayout experimentLayout = new GridLayout(0, 2);
 	ResultSet rs;
 
@@ -59,45 +60,86 @@ public class AffecterServeur {
 		headerLabel.setText("Affecter serveur");
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
 
-		idtable = new JLabel("Entrer id employe");
-		final JTextField tf2 = new JTextField();
-		tf2.setSize(100, 40);
+		JLabelidTable = new JLabel("Selectionner une table");
+		JComboBox<String> selectidTable = new JComboBox<String>();
+		selectidTable.addItem("");
+		ResultSet rs = null;
+		String requete = "SELECT idtable FROM tables";
+		try {
+			Statement stmt = con.con.createStatement();
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+				String idTable = rs.getString("idtable");
+				selectidTable.addItem(idTable);
+			}
+			rs.close();
+			stmt.close();
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		// JComboBox pour sélectionner l'employé é modifier
+		JLabel nameEmployeLabel = new JLabel("Selectionner nom serveur");
+		JComboBox<String> selectNameEmploye = new JComboBox<String>();
+		selectNameEmploye.addItem("");
+		
 
-		idemploye = new JLabel("Selectionner une table");
-		final JTextField tf3 = new JTextField();
-		tf3.setSize(100, 40);
+		
+		ResultSet rs1 = null;
+		String requete1 = "SELECT nom, prenom FROM employe WHERE role='serveur'";
+		try {
+			Statement stmt = con.con.createStatement();
+			rs1 = stmt.executeQuery(requete1);
+			while (rs1.next()) {
+				String nameEmploye = rs1.getString("nom") + " " + rs1.getString("prenom");
+				selectNameEmploye.addItem(nameEmploye);
+			}
+			rs1.close();
+			stmt.close();
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+				
 
 		JButton okButton = new JButton("OK");
+		
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PreparedStatement pst;
-				try {
-					pst = con.mkDataBase().prepareStatement("insert into Projet_GL.tables(idemploye,idtable)  values (?,?)");
-					pst.setInt(1, Integer.parseInt(tf2.getText()));
-					pst.setInt(2, Integer.parseInt(tf3.getText()));
-					pst.execute();
-
-					JOptionPane.showMessageDialog(null, "Done Inserting " + tf2.getText());
-					mainFrame.setVisible(false);
-					pst.close();
-				} catch (Exception ex) {
-					System.out.println(ex);
-					System.out.println("EEEE");
-					JOptionPane.showMessageDialog(null, "Inserting Error : " + tf2.getText());
-					
-				} finally {
-
+				if(!selectNameEmploye.getSelectedItem().equals("") && !selectidTable.getSelectedItem().equals("")) {
+					ResultSet rs = null;
+					PreparedStatement pst;
+					try {
+						Statement stmt = con.con.createStatement();
+						String[] name = selectNameEmploye.getSelectedItem().toString().split(" ");
+						String requete = "SELECT idemploye FROM employe WHERE nom='"+name[0]+"' AND prenom='"+name[1]+"'";
+						rs = stmt.executeQuery(requete);
+            			rs.next();
+						pst = con.mkDataBase().prepareStatement("UPDATE tables SET idemploye="+rs.getString("idemploye")+" WHERE idtable="+selectidTable.getSelectedItem()+"");
+						pst.execute();
+						rs.close();
+						stmt.close();
+						pst.close();
+						JOptionPane.showMessageDialog(null,"Affectation effectué");
+						mainFrame.dispose();
+					} catch (Exception ex) {
+						System.out.println(ex);
+					}
+				}else {
+					JOptionPane.showMessageDialog(null,"Vous devez sélectionner un serveur et une table");
 				}
 			}
 		});
 		
 
 		JPanel jp = new JPanel(null);
-		jp.add(idtable);
-		jp.add(tf2);
-		jp.add(idemploye);
-		jp.add(tf3);
+		jp.add(nameEmployeLabel);
+		jp.add(selectNameEmploye);
+		jp.add(JLabelidTable);
+		jp.add(selectidTable);
+		
+		
+		
 
 		jp.setSize(500, 500);
 		jp.setLayout(experimentLayout);
