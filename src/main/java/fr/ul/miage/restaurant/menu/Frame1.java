@@ -36,7 +36,7 @@ public class Frame1 extends JFrame {
 		setVisible(true);
 
 		// Background
-		//this.background = new JLabel(new ImageIcon("C:\\Users\\Asus\\Downloads\\Java-Project-Final (1)\\Java Project Final\\image\\burger.jpg"));
+		this.background = new JLabel(new ImageIcon("C:\\Users\\Asus\\Downloads\\Java-Project-Final (1)\\Java Project Final\\image\\burger.jpg"));
 
 		this.init();
 
