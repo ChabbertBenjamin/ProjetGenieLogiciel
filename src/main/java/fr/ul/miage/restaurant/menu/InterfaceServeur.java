@@ -9,16 +9,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.menu.sousmenu.DetailTable;
 import fr.ul.miage.restaurant.menu.sousmenu.ModifierCommande;
 import fr.ul.miage.restaurant.menu.sousmenu.SaisirCommande;
+import fr.ul.miage.restaurant.models.Table;
 
 public class InterfaceServeur {
 
@@ -26,16 +28,8 @@ public class InterfaceServeur {
    private JLabel headerLabel;
    private JLabel statusLabel;
    private JPanel controlPanel;
-   JTable cart;
-   String[] columnNames = {"idTable  ",
-			"  statut  ",	
-			"  nbCouverts  ",
-			"  etage  ",
-			"idemploye"};
-   
-   Object data[][] = new Object[100][5];
    int i =0;
-   
+   int j=0;
    
    
    public InterfaceServeur(){
@@ -80,7 +74,7 @@ public class InterfaceServeur {
    }
 
 
-   public void showButtonDemo(){
+   public void showButtonDemo(int idemploye){
  
 		headerLabel.setText("Serveur");
 		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
@@ -91,17 +85,47 @@ public class InterfaceServeur {
         try{	
         	 DBConnection con = new DBConnection();
              Statement stmt =  con.mkDataBase().createStatement();
-             ResultSet rs = stmt.executeQuery("select idtable, statut, nbcouverts, etage, idemploye from tables");
+             ArrayList<Table> listeTable = new ArrayList<Table>();
+             ArrayList<JButton> listButton = new ArrayList();
+             //On récupere les tables correspondant à l'employé
+             ResultSet rs = stmt.executeQuery("select idtable, statut, nbcouverts, etage, idemploye from tables WHERE idemploye ="+idemploye);
              while (rs.next()){
-            	data[i][0] = rs.getInt("idtable"); 
-                data[i][1] = rs.getString("statut");
-                data[i][2] = rs.getInt("nbcouverts"); 
-                data[i][3] = rs.getInt("etage"); 
-                data[i][4] = rs.getInt("idemploye"); 
-                i++;
+            	listeTable.add(new Table(rs.getInt("idtable"),rs.getString("statut"),rs.getInt("nbcouverts"),rs.getInt("etage"),rs.getInt("idemploye")));
+            	JButton buttonTable = new JButton("Table numéro : "+rs.getInt("idtable"));
+            	if(rs.getString("statut").equals("propre")) {
+            	buttonTable.setBackground(Color.GREEN);
+            	}
+            	if(rs.getString("statut").equals("occupe")) {
+                	buttonTable.setBackground(Color.YELLOW);
+            	}
+            	if(rs.getString("statut").equals("sale")) {
+                	buttonTable.setBackground(Color.RED);
+            	}
+            	if(rs.getString("statut").equals("reserve")) {
+                	buttonTable.setBackground(Color.ORANGE);
+            	}
+                listButton.add(buttonTable);	
+            	controlPanel.add(buttonTable);
+            	i++;
+            	buttonTable.addActionListener(new ActionListener() {
+       	         public void actionPerformed(ActionEvent e)
+       	         {
+       	        	
+       	  
+       	        	 DetailTable mc=new DetailTable();
+    	             mc.showButtonDemo(listeTable.get(retourIndexButton(listButton,buttonTable)));
+       	        	 }
+
+       	});
+            	  
              }
-             cart = new JTable(data, columnNames);
-             controlPanel.add(cart);
+             for(int j=0; j < listButton.size();j++){
+            	 
+            	 controlPanel.add(listButton.get(j));
+            	
+             }
+             
+           
        
    
              
@@ -109,8 +133,8 @@ public class InterfaceServeur {
          catch(Exception ex){
              System.out.println(ex);
          }
-         
-         
+   
+        
          
 		
 		
@@ -141,8 +165,8 @@ public class InterfaceServeur {
 });
 
 
-      controlPanel.add(afButton);
-	  controlPanel.add(billButton);
+      //controlPanel.add(afButton);
+	  //controlPanel.add(billButton);
 	  //controlPanel.add(dlButton);
 
 		  
@@ -150,6 +174,15 @@ public class InterfaceServeur {
 	  mainFrame.setLocationRelativeTo(null);
 	  
    }
+//Retourne l'index du boutton pour la table destiné.
+private int retourIndexButton(ArrayList<JButton> buttonList,JButton button) {
+	for(int i =0; i<buttonList.size();i++) {
+		if(buttonList.get(i).equals(button)) {
+			return i;
+		}	
+	}	
+	return 0;
+}
  
    
 }
