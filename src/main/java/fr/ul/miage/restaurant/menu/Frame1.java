@@ -26,6 +26,8 @@ public class Frame1 extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public Frame1() {
+		// Connection à la base de données
+		DBConnection.connection();
 		this.setTitle("Interface de connexion");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//new ImageIcon("C:\\Users\\Asus\\Downloads\\Java-Project-Final (1)\\Java Project Final\\image\\burger.jpg")
@@ -84,8 +86,6 @@ public class Frame1 extends JFrame {
 		// Lorsque l'on appuie sur le bouton login
 		login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Connection à la base de données
-				DBConnection.connection();
 				ResultSet rs = null;
 				String requeteIdentifiant = "SELECT motdepasse, role, idemploye FROM employe WHERE login='" + identifiantTextField.getText() + "'";
 				Boolean connect = false;
