@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
 
@@ -49,7 +50,7 @@ public class InterfaceMaitreDhotel {
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
 		mainFrame.setLocationRelativeTo(null);
-		
+
 		// On ferme la connection à la BDD lorsqu'on ferme la fenêtre
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
@@ -66,20 +67,117 @@ public class InterfaceMaitreDhotel {
 
 	public void launch() {
 		JButton fkButton = new JButton("Affecter un serveur");
+		JButton prixPlatButton = new JButton("Changer le prix d'un plat");
 		fkButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				affecterServeur();
 			}
 		});
+
+		prixPlatButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changerPrixPlat();
+			}
+		});
 		controlPanel.add(fkButton);
+		controlPanel.add(prixPlatButton);
+	}
+
+	public void changerPrixPlat() {
+		final JFrame manageFrame = new JFrame("Changer prix plat");
+		manageFrame.setSize(600, 400);
+		manageFrame.setLayout(new GridLayout(3, 1));
+		manageFrame.getContentPane().setBackground(Color.gray);
+
+		JLabel headerLabel = new JLabel("Changer le prix d'un plat", JLabel.CENTER);
+		headerLabel.setFont(new Font(null, Font.BOLD, 27));
+		headerLabel.setForeground(Color.white);
+		controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
+		manageFrame.setLocationRelativeTo(null);
+		manageFrame.add(headerLabel);
+		manageFrame.add(controlPanel);
+		manageFrame.setVisible(true);
+
+		JLabel labelPrix = new JLabel("Entrer le prix");
+		final JTextField textFieldPrix = new JTextField();
+
+
+		final JComboBox<String> listPlat = getListPlat();
+
+		listPlat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				textFieldPrix.setText(String.valueOf(getPrixFromPlat(listPlat.getSelectedItem().toString())));
+			}
+		});
+
+		textFieldPrix.setText(String.valueOf(getPrixFromPlat(listPlat.getSelectedItem().toString())));
+		final JButton valideButton = new JButton("Valider");
+		valideButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PreparedStatement pst;
+				try {
+					pst = DBConnection.con.prepareStatement("UPDATE plat SET prix="+Integer.parseInt(textFieldPrix.getText())+" WHERE nom='"+listPlat.getSelectedItem().toString()+"'");
+					pst.execute();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(null, "Modification effectué");
+			}
+		});
+
+		GridLayout experimentLayout = new GridLayout(0, 3);
+		JPanel jp = new JPanel(null);
+		jp.add(listPlat);
+		jp.add(labelPrix);
+		jp.add(textFieldPrix);
+		jp.add(valideButton);
+		jp.setLayout(experimentLayout);
+		controlPanel.add(jp);
+
 	}
 	
+	public int getPrixFromPlat(String nom) {
+		ResultSet rs = null;
+		String requete = "SELECT prix FROM plat WHERE nom='" + nom + "'";
+		int prix = -1;
+		try {
+			Statement stmt = DBConnection.con.createStatement();
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+				prix = rs.getInt("prix");
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return prix;
+	}
+
+	public JComboBox<String> getListPlat() {
+		JComboBox<String> list = new JComboBox<String>();
+		ResultSet rs = null;
+		String requete = "SELECT nom FROM plat";
+		try {
+			Statement stmt = DBConnection.con.createStatement();
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+				String name = rs.getString("nom");
+				list.addItem(name);
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return list;
+
+	}
+
 	public void affecterServeur() {
 		final JFrame affectServerFrame = new JFrame("Affecter serveur!");
 		affectServerFrame.setSize(700, 600);
 		affectServerFrame.setLayout(new GridLayout(3, 1));
 		affectServerFrame.getContentPane().setBackground(Color.gray);
-
 
 		JLabel headerLabel = new JLabel("Affecter serveur", JLabel.CENTER);
 		headerLabel.setFont(new Font(null, Font.BOLD, 27));
@@ -90,8 +188,7 @@ public class InterfaceMaitreDhotel {
 		affectServerFrame.add(headerLabel);
 		affectServerFrame.add(controlPanel);
 		affectServerFrame.setVisible(true);
-		
-		
+
 		JLabel JLabelidTable = new JLabel("Selectionner une table");
 		final JComboBox<String> selectidTable = new JComboBox<String>();
 		selectidTable.addItem("");
@@ -106,17 +203,15 @@ public class InterfaceMaitreDhotel {
 			}
 			rs.close();
 			stmt.close();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 		// JComboBox pour sélectionner l'employé é modifier
 		JLabel nameEmployeLabel = new JLabel("Selectionner nom serveur");
 		final JComboBox<String> selectNameEmploye = new JComboBox<String>();
 		selectNameEmploye.addItem("");
-		
 
-		
 		ResultSet rs1 = null;
 		String requete1 = "SELECT nom, prenom FROM employe WHERE role='serveur'";
 		try {
@@ -128,41 +223,41 @@ public class InterfaceMaitreDhotel {
 			}
 			rs1.close();
 			stmt.close();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-				
 
 		JButton okButton = new JButton("OK");
-		
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!selectNameEmploye.getSelectedItem().equals("") && !selectidTable.getSelectedItem().equals("")) {
+				if (!selectNameEmploye.getSelectedItem().equals("") && !selectidTable.getSelectedItem().equals("")) {
 					ResultSet rs = null;
 					PreparedStatement pst;
 					try {
 						Statement stmt = DBConnection.con.createStatement();
 						String[] name = selectNameEmploye.getSelectedItem().toString().split(" ");
-						String requete = "SELECT idemploye FROM employe WHERE nom='"+name[0]+"' AND prenom='"+name[1]+"'";
+						String requete = "SELECT idemploye FROM employe WHERE nom='" + name[0] + "' AND prenom='"
+								+ name[1] + "'";
 						rs = stmt.executeQuery(requete);
-            			rs.next();
-						pst = DBConnection.con.prepareStatement("UPDATE tables SET idemploye="+rs.getString("idemploye")+" WHERE idtable="+selectidTable.getSelectedItem()+"");
+						rs.next();
+						pst = DBConnection.con.prepareStatement("UPDATE tables SET idemploye="
+								+ rs.getString("idemploye") + " WHERE idtable=" + selectidTable.getSelectedItem() + "");
 						pst.execute();
 						rs.close();
 						stmt.close();
 						pst.close();
-						JOptionPane.showMessageDialog(null,"Affectation effectué");
+						JOptionPane.showMessageDialog(null, "Affectation effectué");
 						affectServerFrame.dispose();
 					} catch (Exception ex) {
 						System.out.println(ex);
 					}
-				}else {
-					JOptionPane.showMessageDialog(null,"Vous devez sélectionner un serveur et une table");
+				} else {
+					JOptionPane.showMessageDialog(null, "Vous devez sélectionner un serveur et une table");
 				}
 			}
 		});
-		
+
 		GridLayout experimentLayout = new GridLayout(0, 2);
 		JPanel jp = new JPanel(null);
 		jp.add(nameEmployeLabel);
@@ -173,11 +268,9 @@ public class InterfaceMaitreDhotel {
 		jp.setLayout(experimentLayout);
 		controlPanel.add(jp);
 		jp.add(okButton);
-	
 
 		affectServerFrame.setLocationRelativeTo(null);
 		affectServerFrame.setVisible(true);
 	}
-	
 
 }

@@ -171,7 +171,6 @@ public class InterfaceServeur {
 		tableFrame.setVisible(true);
 	}
 
-	
 	public void saisirCommande() {
 		final JFrame commandeFrame = new JFrame("Saisir commande");
 		commandeFrame.setSize(700, 600);
@@ -188,7 +187,7 @@ public class InterfaceServeur {
 		commandeFrame.add(controlPanel);
 		commandeFrame.setVisible(true);
 		GridLayout experimentLayout = new GridLayout(0, 2);
-		
+
 		JLabel idplat = new JLabel("Entrer id plat");
 		final JTextField textFieldidPlat = new JTextField();
 		textFieldidPlat.setSize(100, 40);
@@ -196,12 +195,11 @@ public class InterfaceServeur {
 		JLabel statut = new JLabel("Entrer statut");
 		final JTextField textFieldStatut = new JTextField();
 		textFieldStatut.setSize(100, 40);
-		
+
 		JLabel idrepasclient = new JLabel("Entrer id repas client");
 		final JTextField textFieldidrepasclient = new JTextField();
 		textFieldidrepasclient.setSize(100, 40);
-	
-		
+
 		JButton okButton = new JButton("OK");
 
 		okButton.addActionListener(new ActionListener() {
@@ -212,34 +210,33 @@ public class InterfaceServeur {
 				try {
 					Statement stmt = DBConnection.con.createStatement();
 					if (textFieldidPlat.getText().equals("") || textFieldStatut.getText().equals("")
-							|| textFieldidrepasclient.getText().equals("") ) {
-						
+							|| textFieldidrepasclient.getText().equals("")) {
+
 						test = false;
 					}
-				
+
 					pst = DBConnection.con.prepareStatement("INSERT into commande (idplat, statut,idrepasclient) values (?,?,?)");
 					pst.setInt(1, Integer.parseInt(textFieldidPlat.getText()));
 					pst.setString(2, textFieldStatut.getText());
 					pst.setInt(3, Integer.parseInt(textFieldidrepasclient.getText()));
-					
-					
+
 					if (test) {
 						pst.execute();
 						JOptionPane.showMessageDialog(null, "Commande saisi !");
-					}else {
+					} else {
 						JOptionPane.showMessageDialog(null,
 								"Impossible de saisir la commande (certain champs sont peut-étre vide)");
 					}
 					rs.close();
-				
-				}catch (SQLException e1) {
+
+				} catch (SQLException e1) {
 					e1.printStackTrace();
-				}finally {
+				} finally {
 					commandeFrame.dispose();
 					saisirCommande();
 				}
-					
-				}
+
+			}
 		});
 
 		JPanel jp = new JPanel(null);
@@ -249,7 +246,7 @@ public class InterfaceServeur {
 		jp.add(textFieldStatut);
 		jp.add(idrepasclient);
 		jp.add(textFieldidrepasclient);
-		
+
 		jp.setSize(500, 500);
 		jp.setLayout(experimentLayout);
 		controlPanel.add(jp);
