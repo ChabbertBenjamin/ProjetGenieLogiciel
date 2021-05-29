@@ -109,12 +109,12 @@ public class InterfaceCuisinier {
 
 		platFrame.add(headerLabel);
 		platFrame.add(controlPanel);
-		platFrame.setVisible(true);
-		
+		//platFrame.setVisible(true);
+		/*
 		JLabel idPlat = new JLabel("Entrer id du plat");
 		final JTextField textFieldidPlat = new JTextField();
 		textFieldidPlat.setSize(100, 40);
-
+*/
 		JLabel idCategorie = new JLabel("Entrer id de la categorie");
 		final JTextField textFieldidCategorie = new JTextField();
 		textFieldidCategorie.setSize(100, 40);
@@ -123,28 +123,59 @@ public class InterfaceCuisinier {
 		final JTextField textFieldPrix = new JTextField();
 		textFieldPrix.setSize(100, 40);
 
-		JLabel idMatierePremiere = new JLabel("Entrer id matiere premiere");
-		final JTextField textFieldidMatierePremiere = new JTextField();
-		textFieldidMatierePremiere.setSize(100, 40);
+		JLabel NomPlat = new JLabel("Entrer le nom du plat");
+		final JTextField textFieldNomPlat = new JTextField();
+		textFieldNomPlat.setSize(100, 40);
 
-		JButton okButton = new JButton("OK");
+		final JButton okButton = new JButton("OK");
 		
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				PreparedStatement pst;
+				Boolean test = true;
+				ResultSet rs = null;
+				try {
+					Statement stmt = DBConnection.con.createStatement();
+					if (textFieldidCategorie.getText().equals("") || textFieldPrix.getText().equals("")
+							|| textFieldNomPlat.getText().equals("") ) {
+						test = false;
+					}
 				
-			}
+					pst = DBConnection.con.prepareStatement("INSERT into plat (idcategorie, prix,nom) values (?,?,?)");
+					//pst.setInt(1, Integer.parseInt(textFieldidPlat.getText()));
+					pst.setInt(1, Integer.parseInt(textFieldidCategorie.getText()));
+					pst.setInt(2, Integer.parseInt(textFieldPrix.getText()));
+					pst.setString(3, textFieldNomPlat.getText());
+					
+					if (test) {
+						pst.execute();
+						JOptionPane.showMessageDialog(null, "Plat défini !");
+					}else {
+						JOptionPane.showMessageDialog(null,
+								"Impossible de definir le plat (certain champs sont peut-étre vide)");
+					}
+					rs.close();
+				
+				}catch (SQLException e1) {
+					e1.printStackTrace();
+				}finally {
+					platFrame.dispose();
+					definirPlat();
+				}
+					
+				}
 		});
 		
 		JPanel jp = new JPanel(null);
 		GridLayout experimentLayout = new GridLayout(0, 2);
-		jp.add(idPlat);
-		jp.add(textFieldidPlat);
+		//jp.add(idPlat);
+		//jp.add(textFieldidPlat);
 		jp.add(idCategorie);
 		jp.add(textFieldidCategorie);
 		jp.add(prix);
 		jp.add(textFieldPrix);
-		jp.add(idMatierePremiere);
-		jp.add(textFieldidMatierePremiere);
+		jp.add(NomPlat);
+		jp.add(textFieldNomPlat);
 
 		jp.setSize(500, 500);
 		jp.setLayout(experimentLayout);
