@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,12 +26,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.models.Stock;
 
 
 public class InterfaceDirecteur {
 
 	private JFrame mainFrame;
 	private JPanel controlPanel;
+	
+	private JComboBox<String> selectNameEmploye;
 	
 
 	public InterfaceDirecteur() {
@@ -107,49 +111,9 @@ public class InterfaceDirecteur {
 		
 	}
 	
-	public void creationEmploye() {
-		JFrame createEmployeFrame = new JFrame("Création d'un employé");
-		createEmployeFrame.setSize(700, 600);
-		createEmployeFrame.setLayout(new GridLayout(3, 1));
-		createEmployeFrame.getContentPane().setBackground(Color.gray);
-
-		JLabel headerLabel = new JLabel("Creation d'un employé", JLabel.CENTER);
-		headerLabel.setFont(new Font(null, Font.BOLD, 27));
-		headerLabel.setForeground(Color.white);
-		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
-		createEmployeFrame.add(headerLabel);
-		createEmployeFrame.add(controlPanel);
-		
-		
-		// Création des champs é remplir
-		JLabel firstNameEmploye = new JLabel("Entrer prénom employé");
-		final JTextField textFieldFirstName = new JTextField();
-		textFieldFirstName.setSize(100, 40);
-
-		JLabel lastNameEmplye = new JLabel("Entrer nom employé");
-		final JTextField textFieldLastName = new JTextField();
-		textFieldLastName.setSize(100, 40);
-
-		JLabel login = new JLabel("Entrer login employé");
-		final JTextField textFieldLogin = new JTextField();
-		textFieldLogin.setSize(100, 40);
-
-		JLabel password = new JLabel("Entrer mot de passe employé");
-		final JTextField textFieldPassword = new JTextField();
-		textFieldPassword.setSize(100, 40);
-
-		// JComboBox pour choisir le réle
-		String[] items = { "serveur", "cuisinier", "assistant service", "maitre d hôtel" };
-		JComboBox<String> listRole = new JComboBox<String>(items);
-		// JComboBox pour sélectionner l'employé é modifier
-		JLabel listNameEmploye = new JLabel("Selectionner le nom d'un employe pour le modifier");
+	public JComboBox<String> remplirNomListEmploye(){
 		JComboBox<String> selectNameEmploye = new JComboBox<String>();
 		selectNameEmploye.addItem("");
-		
-		final JButton okButton = new JButton("Créer/Modifier");
-		final JButton deleteButton = new JButton("Supprimer");
-		
 		ResultSet rs = null;
 		String requete = "SELECT * FROM employe WHERE role!='directeur'";
 		try {
@@ -164,6 +128,45 @@ public class InterfaceDirecteur {
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return selectNameEmploye;
+	}
+	
+	public void creationEmploye() {
+		JFrame createEmployeFrame = new JFrame("Création d'un employé");
+		createEmployeFrame.setSize(700, 600);
+		createEmployeFrame.setLayout(new GridLayout(3, 1));
+		createEmployeFrame.getContentPane().setBackground(Color.gray);
+
+		JLabel headerLabel = new JLabel("Creation d'un employé", JLabel.CENTER);
+		headerLabel.setFont(new Font(null, Font.BOLD, 27));
+		headerLabel.setForeground(Color.white);
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
+		createEmployeFrame.add(headerLabel);
+		createEmployeFrame.add(controlPanel);
+		
+		// Création des champs à remplir
+		JLabel firstNameEmploye = new JLabel("Entrer prénom employé");
+		final JTextField textFieldFirstName = new JTextField();
+
+		JLabel lastNameEmplye = new JLabel("Entrer nom employé");
+		final JTextField textFieldLastName = new JTextField();
+
+		JLabel login = new JLabel("Entrer login employé");
+		final JTextField textFieldLogin = new JTextField();
+
+		JLabel password = new JLabel("Entrer mot de passe employé");
+		final JTextField textFieldPassword = new JTextField();
+
+		// JComboBox pour choisir le réle
+		String[] items = { "serveur", "cuisinier", "assistant service", "maitre d hôtel" };
+		JComboBox<String> listRole = new JComboBox<String>(items);
+		// JComboBox pour sélectionner l'employé é modifier
+		JLabel listNameEmploye = new JLabel("Selectionner le nom d'un employe pour le modifier");
+		selectNameEmploye = remplirNomListEmploye();
+
+		final JButton okButton = new JButton("Créer/Modifier");
+		final JButton deleteButton = new JButton("Supprimer");
 		
 		// Lorsqu'on change la selection de l'employé
 		selectNameEmploye.addActionListener(new ActionListener() {
@@ -173,7 +176,7 @@ public class InterfaceDirecteur {
             		String[] name = selectNameEmploye.getSelectedItem().toString().split(" ");
             		textFieldFirstName.setText(name[1]);
             		textFieldLastName.setText(name[0]);
-            		String requete = "SELECT * FROM employe WHERE nom='"+name[0]+"' and prenom='"+name[1]+"'";
+            		String requete = "SELECT login, motdepasse, role FROM employe WHERE nom='"+name[0]+"' and prenom='"+name[1]+"'";
             		try {
             			ResultSet rs = null;
             			Statement stmt = DBConnection.con.createStatement();
@@ -194,15 +197,15 @@ public class InterfaceDirecteur {
         				textFieldLogin.setText(login);
         				textFieldPassword.setText(motDePasse);
         				deleteButton.setVisible(true);
+                		// Rendre impossible la modification du prénom
+                		textFieldFirstName.setEnabled(false);
+                		textFieldLastName.setEnabled(false);
+                		okButton.setText("Modifier");
         				rs.close();
         				stmt.close();
             		}catch (Exception e) {
             			System.out.println(e.getMessage());
             		}
-            		// Rendre impossible la modification du prénom
-            		textFieldFirstName.setEnabled(false);
-            		textFieldLastName.setEnabled(false);
-            		okButton.setText("Modifier");
             	}else {
             		textFieldFirstName.setText("");
             		textFieldLastName.setText("");
@@ -243,7 +246,7 @@ public class InterfaceDirecteur {
             		}catch (Exception e1) {
 						System.out.println(e1.getMessage());
 						JOptionPane.showMessageDialog(null,"Erreur dans la modification");
-					}	
+					}
 				}else {
 					// CREATION D'UN NOUVEL EMPLOYE
 					Boolean test = true;
@@ -264,8 +267,7 @@ public class InterfaceDirecteur {
 								|| textFieldPassword.getText().equals("") || alreadyExist) {
 							test = false;
 						}
-						pst = DBConnection.con.prepareStatement(
-								"INSERT into employe (nom, prenom, login, motdepasse, role) values (?,?,?,?,?)");
+						pst = DBConnection.con.prepareStatement("INSERT into employe (nom, prenom, login, motdepasse, role) values (?,?,?,?,?)");
 						pst.setString(1, textFieldLastName.getText());
 						pst.setString(2, textFieldFirstName.getText());
 						pst.setString(3, textFieldLogin.getText());
@@ -282,27 +284,18 @@ public class InterfaceDirecteur {
 							JOptionPane.showMessageDialog(null,
 									"Impossible de créer l'employe (certain champs sont peut-étre vide)");
 						}
+						
 						for(int i=selectNameEmploye.getItemCount()-1;i>0;i--){
 							selectNameEmploye.removeItemAt(i);
 						}
-						ResultSet rs1 = null;
-						String requete1 = "SELECT * FROM employe WHERE role!='directeur'";
-						Statement stmt1 = DBConnection.con.createStatement();
-						rs1 = stmt1.executeQuery(requete1);
-						while (rs1.next()) {
-							String nameEmploye = rs1.getString("nom") + " " + rs1.getString("prenom");
-							selectNameEmploye.addItem(nameEmploye);
-						}
-						textFieldFirstName.setText("");
-						textFieldLastName.setText("");
-						textFieldLogin.setText("");
-						textFieldPassword.setText("");
 						rs.close();
 						stmt.close();
-						rs1.close();
-						stmt1.close();
+						
 					} catch (SQLException e1) {
 						e1.printStackTrace();
+					}finally {
+						createEmployeFrame.dispose();
+						creationEmploye();
 					}
 				}
 				
@@ -329,18 +322,15 @@ public class InterfaceDirecteur {
         			pst = DBConnection.con.prepareStatement("DELETE FROM employe WHERE idEmploye='" +id + "'");
         			pst.execute();
 					JOptionPane.showMessageDialog(null,"Suppression effectué");
-					// IL FAUT VIDER LES CHAMPS
-					textFieldFirstName.setText("");
-					textFieldLastName.setText("");
-					textFieldLogin.setText("");
-					textFieldPassword.setText("");
-					selectNameEmploye.removeItemAt(selectNameEmploye.getSelectedIndex());
 					rs.close();
 					stmt.close();
         		}catch (Exception e1) {
 					System.out.println(e1.getMessage());
 					JOptionPane.showMessageDialog(null,"Erreur dans la suppression");
-				}	
+				}finally {
+					createEmployeFrame.dispose();
+					creationEmploye();
+				}
 			}
 		});
 		// Ajout de tous les éléments
@@ -374,14 +364,19 @@ public class InterfaceDirecteur {
 		JPanel jp2 = new JPanel();
 		jp2.setSize(400, 400);
 
-		String[] columnNames = { "Nom ", "Quantité" };
-		String[][] donnees = getData();
-		JTable cart = new JTable(donnees, columnNames);
+		ArrayList<Stock> stock = getData();
+		Object [] col = {"Nom","Quantité"};
+		Object[][] data= new Object[stock.size()][2];
+        for(int i=0;i<stock.size();i++){
+       	 data[i][0] = stock.get(i).getNom();
+         data[i][1] = stock.get(i).getQuantite();
+        }
+        JTable cart = new JTable(data, col);
+
 		cart.setSize(300, 450);
 		jp2.setLayout(new FlowLayout());
 
-		jp2.add(new JScrollPane(cart, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+		jp2.add(new JScrollPane(cart, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
 		JButton buy = new JButton("Acheter des matiéres premiéres");
 		buy.setSize(40, 50);
@@ -399,6 +394,22 @@ public class InterfaceDirecteur {
 		stockFrame.setVisible(true);
 		cart.setEnabled(false);
 	}
+	public ArrayList<Stock> getData() {
+		ResultSet rs = null;
+		ArrayList<Stock> stock = new ArrayList<Stock>() ;
+		String requete = "SELECT * FROM matierepremiere";
+		try {
+			Statement stmt = DBConnection.con.createStatement();
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+				stock.add(new Stock(rs.getString("nom"),rs.getInt("quantite")));
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return stock;
+	}
+	
 	
 	public void BuyStock() {
 		JFrame buyFrame = new JFrame("Acheter");
@@ -526,8 +537,6 @@ public class InterfaceDirecteur {
 		modif.setSize(40, 50);
 		modif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
 				if (listMatierePremiere.getSelectedItem().toString().equals("")) {
 					// Requete de création
 					PreparedStatement pst;
@@ -539,10 +548,7 @@ public class InterfaceDirecteur {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
 					JOptionPane.showMessageDialog(null, "Création effectué");
-					
-					
 				} else {
 					// Requete de modification
 					PreparedStatement pst;
@@ -554,17 +560,11 @@ public class InterfaceDirecteur {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
-					
 				}
 				manageFrame.dispose();
 				BuyStock();
-				
-				
 			}
 		});
-
-		
 
 		// Lorsqu'on change la selection de la matiére premiére
 		listMatierePremiere.addActionListener(new ActionListener() {
@@ -597,7 +597,6 @@ public class InterfaceDirecteur {
 	}
 	
 	public JComboBox<String> getListMatierePremiere(JComboBox<String> list) {
-
 		ResultSet rs = null;
 		String requete = "SELECT nom FROM matierepremiere";
 		try {
@@ -614,33 +613,6 @@ public class InterfaceDirecteur {
 		return list;
 	}
 	
-	public String[][] getData() {
-		ResultSet rs = null;
-		int nbLignes = 0;
-		try {
-			Statement stmt = DBConnection.con.createStatement();
-			rs = stmt.executeQuery("SELECT count(*) AS nbLignes FROM matierepremiere ");
-			rs.next();
-			nbLignes = rs.getInt("nbLignes");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		String[][] donnees = new String[nbLignes][2];
 
-		String requete = "SELECT * FROM matierepremiere";
-		try {
-			Statement stmt = DBConnection.con.createStatement();
-			rs = stmt.executeQuery(requete);
-			int compteur = 0;
-			while (rs.next()) {
-				donnees[compteur][0] = rs.getString("nom");
-				donnees[compteur][1] = rs.getString("quantite");
-				compteur++;
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return donnees;
-	}
 
 }

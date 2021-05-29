@@ -6,10 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
 import javax.swing.JComboBox;
 import org.junit.Test;
 import fr.ul.miage.restaurant.bdd.DBConnection;
 import fr.ul.miage.restaurant.menu.InterfaceDirecteur;
+import fr.ul.miage.restaurant.models.Stock;
 
 
 public class StockTest {
@@ -28,8 +31,8 @@ public class StockTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		String[][] resultat = new InterfaceDirecteur().getData();
-		int test = resultat.length;
+		ArrayList<Stock> resultat = new InterfaceDirecteur().getData();
+		int test = resultat.size();
 		
 		assertEquals(test,nbLignes);
 	}
