@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import fr.ul.miage.restaurant.bdd.DBConnection;
@@ -77,15 +79,15 @@ public class InterfaceServeur {
 
 		try {
 			Statement stmt = DBConnection.con.createStatement();
-			ArrayList<Table> listeTable = new ArrayList<Table>();
-			ArrayList<JButton> listButton = new ArrayList<JButton>();
+			final ArrayList<Table> listeTable = new ArrayList<Table>();
+			final ArrayList<JButton> listButton = new ArrayList<JButton>();
 			// On récupere les tables correspondant à l'employé
 			ResultSet rs = stmt.executeQuery(
 					"SELECT idtable, statut, nbcouverts, etage, idemploye from tables WHERE idemploye =" + idEmploye);
 			while (rs.next()) {
 				listeTable.add(new Table(rs.getInt("idtable"), rs.getString("statut"), rs.getInt("nbcouverts"),
 						rs.getInt("etage"), rs.getInt("idemploye")));
-				JButton buttonTable = new JButton("Table numéro : " + rs.getInt("idtable"));
+				final JButton buttonTable = new JButton("Table numéro : " + rs.getInt("idtable"));
 				if (rs.getString("statut").equals("propre")) {
 					buttonTable.setBackground(Color.GREEN);
 				}
@@ -113,7 +115,7 @@ public class InterfaceServeur {
 	}
 
 	public void detailTable(Table table) {
-		JFrame tableFrame = new JFrame("Détails de la table");
+		final JFrame tableFrame = new JFrame("Détails de la table");
 		tableFrame.setSize(700, 600);
 		tableFrame.setLayout(new GridLayout(3, 1));
 		tableFrame.getContentPane().setBackground(Color.gray);
@@ -171,7 +173,7 @@ public class InterfaceServeur {
 
 	
 	public void saisirCommande() {
-		JFrame commandeFrame = new JFrame("Saisir commande");
+		final JFrame commandeFrame = new JFrame("Saisir commande");
 		commandeFrame.setSize(700, 600);
 		commandeFrame.setLayout(new GridLayout(3, 1));
 
