@@ -27,79 +27,61 @@ import fr.ul.miage.restaurant.bdd.DBConnection;
 public class InterfaceAssistantService {
 
 	private JFrame mainFrame;
-	private JLabel headerLabel;
-	private JLabel statusLabel;
 	private JPanel controlPanel;
 	private JTable cart;
 
-	private DBConnection con;
-
 	public InterfaceAssistantService() {
-		this.con = new DBConnection();
-		prepareGUI();
-
+		mainFrame = new JFrame("Assistant de service");
+		init();
+		launch();
+		mainFrame.setVisible(true);
 	}
 
-
-
-	private void prepareGUI() {
-		mainFrame = new JFrame("Assistant de service");
+	private void init() {
 		mainFrame.setBounds(100, 100, 700, 400);
 		mainFrame.setLayout(new GridLayout(3, 1));
-
 		mainFrame.getContentPane().setBackground(Color.orange);
 
-		mainFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent windowEvent) {
-				try {
-					con.con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} finally {
-					System.exit(0);
-				}
-
-			}
-		});
-		headerLabel = new JLabel("", JLabel.CENTER);
-		statusLabel = new JLabel("", JLabel.CENTER);
-
-		statusLabel.setSize(350, 300);
+		JLabel headerLabel = new JLabel("Assistant de service", JLabel.CENTER);
+		headerLabel.setFont(new Font(null, Font.BOLD, 27));
+		headerLabel.setForeground(Color.white);
 
 		controlPanel = new JPanel();
 		controlPanel.setLayout(new GridLayout(1, 5));
 
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
-		mainFrame.add(statusLabel);
-		mainFrame.setVisible(true);
+		mainFrame.setLocationRelativeTo(null);
 
+		// On ferme la connection à la BDD lorsqu'on ferme la fenêtre
+		mainFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent windowEvent) {
+				try {
+					DBConnection.con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} finally {
+					System.exit(0);
+				}
+			}
+		});
 	}
 
-	public void showButtonDemo() {
-
-		headerLabel.setText("Assistant de service");
-		this.headerLabel.setFont(new Font(null, Font.BOLD, 27));
-		headerLabel.setForeground(Color.white);
-
+	public void launch() {
 		JButton seeTableButton = new JButton("Voir les tables");
-
 		seeTableButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seeTable();
 			}
 		});
 		controlPanel.add(seeTableButton);
-		mainFrame.setVisible(true);
-		mainFrame.setLocationRelativeTo(null);
-
 	}
 
 	public String[][] getData() {
 		ResultSet rs = null;
 		int nbLignes = 0;
 		try {
-			Statement stmt = con.con.createStatement();
+			Statement stmt = DBConnection.con.createStatement();
 			rs = stmt.executeQuery("SELECT count(*) AS nbLignes FROM tables ");
 			rs.next();
 			nbLignes = rs.getInt("nbLignes");
@@ -109,7 +91,7 @@ public class InterfaceAssistantService {
 		String[][] donnees = new String[nbLignes][4];
 		String requete = "SELECT * FROM tables";
 		try {
-			Statement stmt = con.con.createStatement();
+			Statement stmt = DBConnection.con.createStatement();
 			rs = stmt.executeQuery(requete);
 			int compteur = 0;
 			while (rs.next()) {
@@ -132,7 +114,7 @@ public class InterfaceAssistantService {
 		ResultSet rs = null;
 		String requete = "SELECT idTable FROM tables WHERE statut='sale'";
 		try {
-			Statement stmt = con.con.createStatement();
+			Statement stmt = DBConnection.con.createStatement();
 			rs = stmt.executeQuery(requete);
 			while (rs.next()) {
 				String id = rs.getString("idTable");
@@ -147,8 +129,9 @@ public class InterfaceAssistantService {
 	}
 
 	public void seeTable() {
-		mainFrame = new JFrame("Tables");
-		mainFrame.setSize(500, 550);
+
+		JFrame tableFrame = new JFrame("Tables");
+		tableFrame.setSize(500, 550);
 
 		JPanel jp = new JPanel();
 		jp.setSize(400, 400);
@@ -157,6 +140,9 @@ public class InterfaceAssistantService {
 		String[][] donnees = getData();
 		cart = new JTable(donnees, columnNames);
 		cart.setSize(300, 450);
+
+		cart.setAutoCreateRowSorter(true);
+		cart.setEnabled(false);
 		jp.setLayout(new FlowLayout());
 
 		jp.add(new JScrollPane(cart, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
@@ -175,11 +161,11 @@ public class InterfaceAssistantService {
 				} else {
 					PreparedStatement pst;
 					try {
-						pst = con.mkDataBase().prepareStatement("UPDATE tables SET statut='propre' WHERE idTable="
+						pst = DBConnection.con.prepareStatement("UPDATE tables SET statut='propre' WHERE idTable="
 								+ listTableToSet.getSelectedItem().toString());
 						pst.execute();
 						JOptionPane.showMessageDialog(null, "Table dressé !");
-						mainFrame.dispose();
+						tableFrame.dispose();
 						seeTable();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
@@ -190,13 +176,9 @@ public class InterfaceAssistantService {
 
 		jp.add(listTableToSet);
 		jp.add(setTable);
-
-		mainFrame.add(jp);
-		mainFrame.setLocationRelativeTo(null);
-		mainFrame.setVisible(true);
-		cart.setAutoCreateRowSorter(true);
-		cart.setEnabled(false);
-
+		tableFrame.add(jp);
+		tableFrame.setLocationRelativeTo(null);
+		tableFrame.setVisible(true);
 	}
 
 }
