@@ -77,15 +77,15 @@ public class InterfaceServeur {
 
 		try {
 			Statement stmt = DBConnection.con.createStatement();
-			final ArrayList<Table> listeTable = new ArrayList<Table>();
-			final ArrayList<JButton> listButton = new ArrayList<JButton>();
+			ArrayList<Table> listeTable = new ArrayList<Table>();
+			ArrayList<JButton> listButton = new ArrayList<JButton>();
 			// On récupere les tables correspondant à l'employé
 			ResultSet rs = stmt.executeQuery(
 					"SELECT idtable, statut, nbcouverts, etage, idemploye from tables WHERE idemploye =" + idEmploye);
 			while (rs.next()) {
 				listeTable.add(new Table(rs.getInt("idtable"), rs.getString("statut"), rs.getInt("nbcouverts"),
 						rs.getInt("etage"), rs.getInt("idemploye")));
-				final JButton buttonTable = new JButton("Table numéro : " + rs.getInt("idtable"));
+				JButton buttonTable = new JButton("Table numéro : " + rs.getInt("idtable"));
 				if (rs.getString("statut").equals("propre")) {
 					buttonTable.setBackground(Color.GREEN);
 				}
@@ -113,7 +113,7 @@ public class InterfaceServeur {
 	}
 
 	public void detailTable(Table table) {
-		final JFrame tableFrame = new JFrame("Détails de la table");
+		JFrame tableFrame = new JFrame("Détails de la table");
 		tableFrame.setSize(700, 600);
 		tableFrame.setLayout(new GridLayout(3, 1));
 		tableFrame.getContentPane().setBackground(Color.gray);
@@ -169,7 +169,7 @@ public class InterfaceServeur {
 		tableFrame.setVisible(true);
 	}
 
-	// Fonction non fonctionnelle
+	
 	public void saisirCommande() {
 		JFrame commandeFrame = new JFrame("Saisir commande");
 		commandeFrame.setSize(700, 600);
@@ -186,11 +186,7 @@ public class InterfaceServeur {
 		commandeFrame.add(controlPanel);
 		commandeFrame.setVisible(true);
 		GridLayout experimentLayout = new GridLayout(0, 2);
-
-		JLabel idcommande = new JLabel("Entrer id commande");
-		final JTextField textFieldidCommande = new JTextField();
-		textFieldidCommande.setSize(100, 40);
-
+		
 		JLabel idplat = new JLabel("Entrer id plat");
 		final JTextField textFieldidPlat = new JTextField();
 		textFieldidPlat.setSize(100, 40);
@@ -198,28 +194,60 @@ public class InterfaceServeur {
 		JLabel statut = new JLabel("Entrer statut");
 		final JTextField textFieldStatut = new JTextField();
 		textFieldStatut.setSize(100, 40);
-
-		JLabel idtable = new JLabel("Entrer id de la table");
-		final JTextField textFieldidTable = new JTextField();
-		textFieldidTable.setSize(100, 40);
-
+		
+		JLabel idrepasclient = new JLabel("Entrer id repas client");
+		final JTextField textFieldidrepasclient = new JTextField();
+		textFieldidrepasclient.setSize(100, 40);
+	
+		
 		JButton okButton = new JButton("OK");
 
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-			}
+				PreparedStatement pst;
+				Boolean test = true;
+				ResultSet rs = null;
+				try {
+					Statement stmt = DBConnection.con.createStatement();
+					if (textFieldidPlat.getText().equals("") || textFieldStatut.getText().equals("")
+							|| textFieldidrepasclient.getText().equals("") ) {
+						
+						test = false;
+					}
+				
+					pst = DBConnection.con.prepareStatement("INSERT into commande (idplat, statut,idrepasclient) values (?,?,?)");
+					pst.setInt(1, Integer.parseInt(textFieldidPlat.getText()));
+					pst.setString(2, textFieldStatut.getText());
+					pst.setInt(3, Integer.parseInt(textFieldidrepasclient.getText()));
+					
+					
+					if (test) {
+						pst.execute();
+						JOptionPane.showMessageDialog(null, "Commande saisi !");
+					}else {
+						JOptionPane.showMessageDialog(null,
+								"Impossible de saisir la commande (certain champs sont peut-étre vide)");
+					}
+					rs.close();
+				
+				}catch (SQLException e1) {
+					e1.printStackTrace();
+				}finally {
+					commandeFrame.dispose();
+					saisirCommande();
+				}
+					
+				}
 		});
 
 		JPanel jp = new JPanel(null);
-		jp.add(idcommande);
-		jp.add(textFieldidCommande);
 		jp.add(idplat);
 		jp.add(textFieldidPlat);
 		jp.add(statut);
 		jp.add(textFieldStatut);
-		jp.add(idtable);
-		jp.add(textFieldidTable);
+		jp.add(idrepasclient);
+		jp.add(textFieldidrepasclient);
+		
 		jp.setSize(500, 500);
 		jp.setLayout(experimentLayout);
 		controlPanel.add(jp);
