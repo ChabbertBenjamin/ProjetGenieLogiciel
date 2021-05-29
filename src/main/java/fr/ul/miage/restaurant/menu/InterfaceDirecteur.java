@@ -34,7 +34,7 @@ public class InterfaceDirecteur {
 	private JFrame mainFrame;
 	private JPanel controlPanel;
 	
-	private JComboBox<String> selectNameEmploye;
+
 	
 
 	public InterfaceDirecteur() {
@@ -132,7 +132,7 @@ public class InterfaceDirecteur {
 	}
 	
 	public void creationEmploye() {
-		JFrame createEmployeFrame = new JFrame("Création d'un employé");
+		final JFrame createEmployeFrame = new JFrame("Création d'un employé");
 		createEmployeFrame.setSize(700, 600);
 		createEmployeFrame.setLayout(new GridLayout(3, 1));
 		createEmployeFrame.getContentPane().setBackground(Color.gray);
@@ -160,10 +160,10 @@ public class InterfaceDirecteur {
 
 		// JComboBox pour choisir le réle
 		String[] items = { "serveur", "cuisinier", "assistant service", "maitre d hôtel" };
-		JComboBox<String> listRole = new JComboBox<String>(items);
+		final JComboBox<String> listRole = new JComboBox<String>(items);
 		// JComboBox pour sélectionner l'employé é modifier
 		JLabel listNameEmploye = new JLabel("Selectionner le nom d'un employe pour le modifier");
-		selectNameEmploye = remplirNomListEmploye();
+		final JComboBox<String> selectNameEmploye = remplirNomListEmploye();
 
 		final JButton okButton = new JButton("Créer/Modifier");
 		final JButton deleteButton = new JButton("Supprimer");
@@ -358,7 +358,7 @@ public class InterfaceDirecteur {
 	}
 	
 	public void voirStock() {
-		JFrame stockFrame = new JFrame("Stock");
+		final JFrame stockFrame = new JFrame("Stock");
 		stockFrame.setSize(600, 550);
 
 		JPanel jp2 = new JPanel();
@@ -412,7 +412,7 @@ public class InterfaceDirecteur {
 	
 	
 	public void BuyStock() {
-		JFrame buyFrame = new JFrame("Acheter");
+		final JFrame buyFrame = new JFrame("Acheter");
 		buyFrame.setSize(600, 400);
 		buyFrame.setLayout(new GridLayout(3, 1));
 		buyFrame.getContentPane().setBackground(Color.gray);
@@ -429,7 +429,7 @@ public class InterfaceDirecteur {
 
 		// JComboBox pour sélectionner l'employé é modifier
 		JComboBox<String> list = new JComboBox<String>();
-		JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
+		final JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
 
 		JLabel quantite = new JLabel(" Entrer quantité ");
 		final JTextField textFieldQuantite = new JTextField();
@@ -510,7 +510,7 @@ public class InterfaceDirecteur {
 	}
 	
 	public void newMatierePremiere() {
-		JFrame manageFrame = new JFrame("gérer");
+		final JFrame manageFrame = new JFrame("gérer");
 		manageFrame.setSize(600, 400);
 		manageFrame.setLayout(new GridLayout(3, 1));
 		manageFrame.getContentPane().setBackground(Color.gray);
@@ -531,9 +531,9 @@ public class InterfaceDirecteur {
 		
 		JComboBox<String> list = new JComboBox<String>();
 		list.addItem("");
-		JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
+		final JComboBox<String> listMatierePremiere = getListMatierePremiere(list);
 
-		JButton modif = new JButton("Créer");
+		final JButton modif = new JButton("Créer");
 		modif.setSize(40, 50);
 		modif.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

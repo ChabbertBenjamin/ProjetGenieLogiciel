@@ -75,7 +75,7 @@ public class InterfaceMaitreDhotel {
 	}
 	
 	public void affecterServeur() {
-		JFrame affectServerFrame = new JFrame("Affecter serveur!");
+		final JFrame affectServerFrame = new JFrame("Affecter serveur!");
 		affectServerFrame.setSize(700, 600);
 		affectServerFrame.setLayout(new GridLayout(3, 1));
 		affectServerFrame.getContentPane().setBackground(Color.gray);
@@ -93,7 +93,7 @@ public class InterfaceMaitreDhotel {
 		
 		
 		JLabel JLabelidTable = new JLabel("Selectionner une table");
-		JComboBox<String> selectidTable = new JComboBox<String>();
+		final JComboBox<String> selectidTable = new JComboBox<String>();
 		selectidTable.addItem("");
 		ResultSet rs = null;
 		String requete = "SELECT idtable FROM tables";
@@ -112,7 +112,7 @@ public class InterfaceMaitreDhotel {
 		
 		// JComboBox pour sélectionner l'employé é modifier
 		JLabel nameEmployeLabel = new JLabel("Selectionner nom serveur");
-		JComboBox<String> selectNameEmploye = new JComboBox<String>();
+		final JComboBox<String> selectNameEmploye = new JComboBox<String>();
 		selectNameEmploye.addItem("");
 		
 

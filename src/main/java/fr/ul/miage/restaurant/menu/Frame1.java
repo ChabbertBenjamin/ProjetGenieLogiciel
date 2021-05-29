@@ -53,7 +53,7 @@ public class Frame1 extends JFrame {
 		add(idLabel);
 		
 		// TextField identifiant
-		JTextField identifiantTextField = new JTextField();
+		final JTextField identifiantTextField = new JTextField();
 		identifiantTextField.setBounds(350, 125, 200, 30);
 		add(identifiantTextField);
 
@@ -65,7 +65,7 @@ public class Frame1 extends JFrame {
 		add(passwordLabel);
 		
 		// PasswordField mot de passe
-		JPasswordField passwordField = new JPasswordField();
+		final JPasswordField passwordField = new JPasswordField();
 		passwordField.setBounds(350, 165, 200, 30);
 		add(passwordField);
 

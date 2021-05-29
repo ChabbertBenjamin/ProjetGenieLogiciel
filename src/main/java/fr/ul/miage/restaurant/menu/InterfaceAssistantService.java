@@ -130,7 +130,7 @@ public class InterfaceAssistantService {
 
 	public void seeTable() {
 
-		JFrame tableFrame = new JFrame("Tables");
+		final JFrame tableFrame = new JFrame("Tables");
 		tableFrame.setSize(500, 550);
 
 		JPanel jp = new JPanel();
@@ -149,7 +149,7 @@ public class InterfaceAssistantService {
 
 		JComboBox<String> list = new JComboBox<String>();
 		list.addItem("");
-		JComboBox<String> listTableToSet = getListTableToSet(list);
+		final JComboBox<String> listTableToSet = getListTableToSet(list);
 
 		JButton setTable = new JButton("Dresser la table sélectionné");
 		setTable.setSize(40, 50);
