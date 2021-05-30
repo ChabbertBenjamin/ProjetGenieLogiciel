@@ -19,9 +19,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
 import java.util.ArrayList;
-
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -146,12 +144,6 @@ public class InterfaceCuisinier {
 
 		JLabel labelNomPlat = new JLabel("Selectionner le nom du plat ");
 		final JComboBox<String> listNomPlat = getListPlat();
-
-		/*
-		 * Object [] col = {"Nom","Quantité"}; Object[][] data= new Object[5][5];
-		 * 
-		 * JTable cart = new JTable(data, col);
-		 */
 		final JButton okButton = new JButton("OK");
 
 		okButton.addActionListener(new ActionListener() {
@@ -174,7 +166,6 @@ public class InterfaceCuisinier {
 		selectionFrame.setVisible(true);
 	}
 
-
 	public void composerPlat(final String nomPlat) {
 		final JFrame composerFrame = new JFrame("Composition " + nomPlat);
 		composerFrame.setSize(600, 550);
@@ -182,7 +173,7 @@ public class InterfaceCuisinier {
 		JPanel panel = new JPanel(new BorderLayout(10, 20)); // panel principal
 		panel.setPreferredSize(new Dimension(600, 550));
 		composerFrame.add(panel);
-		
+
 		// bouton valider à droite
 		JButton validateButton = new JButton("Valider");
 		JPanel panelWest = new JPanel(new GridLayout(13, 1));
@@ -206,7 +197,8 @@ public class InterfaceCuisinier {
 				idMatierePremiere = rs.getInt("idmatierepremiere");
 				quantite = rs.getInt("quantitematierepremiere");
 				String nomMatierePremiere = "";
-				String requeteNomMatierePremiere = "SELECT nom FROM matierepremiere WHERE idmatierepremiere="+ idMatierePremiere;
+				String requeteNomMatierePremiere = "SELECT nom FROM matierepremiere WHERE idmatierepremiere="
+						+ idMatierePremiere;
 				try {
 					ResultSet rs2 = null;
 					Statement stmt2 = DBConnection.con.createStatement();
@@ -227,9 +219,17 @@ public class InterfaceCuisinier {
 		} catch (Exception e1) {
 			System.out.println(e1.getMessage());
 		}
-		JTable table = new JTable(model);
+		JTable table = new JTable(model) {
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
+		// Empecher la modifications des valeurs directement
+		table.isCellEditable(0, 0);
+
 		JPanel panelCentre = new JPanel(new GridLayout(1, 1));
-		panelCentre.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+		panelCentre.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		panel.add(panelCentre, BorderLayout.CENTER);// ajout du panelCentre au panel principal
 
 		// ELEMENT EN BAS
@@ -251,7 +251,7 @@ public class InterfaceCuisinier {
 		composerFrame.pack();
 		composerFrame.setLocationRelativeTo(null);
 		composerFrame.setVisible(true);
-		
+
 		// Action des boutons
 		add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -305,16 +305,16 @@ public class InterfaceCuisinier {
 		});
 		validateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				insertCompositionPlat(model,nomPlat);
+				insertCompositionPlat(model, nomPlat);
 			}
 		});
 	}
-	
+
 	public void insertCompositionPlat(DefaultTableModel model, String nomPlat) {
 		// Récupérer l'id du plat
 		int idPlat = getidPlat(nomPlat);
 		ResultSet rs = null;
-		
+
 		// On delete toutes les lignes ayant l'idPlat
 		try {
 			PreparedStatement pst;
@@ -334,7 +334,7 @@ public class InterfaceCuisinier {
 			int quantite = Integer.parseInt(model.getValueAt(j, 1).toString());
 			int idMatierePremiere = -1;
 			// Récupérer l'id de la matière première
-			String requeteidMatierePremiere = "SELECT idMatierePremiere FROM matierepremiere WHERE nom='" + nom+ "'";
+			String requeteidMatierePremiere = "SELECT idMatierePremiere FROM matierepremiere WHERE nom='" + nom + "'";
 			try {
 				Statement stmt = DBConnection.con.createStatement();
 				rs = stmt.executeQuery(requeteidMatierePremiere);
@@ -348,7 +348,8 @@ public class InterfaceCuisinier {
 			// On insert
 			PreparedStatement pst2;
 			try {
-				pst2 = DBConnection.con.prepareStatement("INSERT INTO compositionplat (idplat, idmatierepremiere, quantitematierepremiere) values (?,?,?)");
+				pst2 = DBConnection.con.prepareStatement(
+						"INSERT INTO compositionplat (idplat, idmatierepremiere, quantitematierepremiere) values (?,?,?)");
 				pst2.setInt(1, idPlat);
 				pst2.setInt(2, idMatierePremiere);
 				pst2.setInt(3, quantite);
@@ -358,7 +359,7 @@ public class InterfaceCuisinier {
 				e.printStackTrace();
 			}
 		}
-		JOptionPane.showMessageDialog(null,"Modification effectué");
+		JOptionPane.showMessageDialog(null, "Modification effectué");
 	}
 
 	public JComboBox<String> getListMatierePremiere() {
@@ -381,6 +382,148 @@ public class InterfaceCuisinier {
 	}
 
 	public void visualiserCommande() {
+		final JFrame composerFrame = new JFrame("Visualisation commande");
+		composerFrame.setSize(600, 550);
+		composerFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		JPanel panel = new JPanel(new BorderLayout(10, 20)); // panel principal
+		panel.setPreferredSize(new Dimension(600, 550));
+		composerFrame.add(panel);
+
+		// bouton valider à droite
+		JButton validateButton = new JButton("Préparer");
+		JPanel panelWest = new JPanel(new GridLayout(13, 1));
+		panelWest.add(validateButton);
+		panel.add(panelWest, BorderLayout.EAST);// ajout du panelWest au panel principal
+
+		// JTable au milieu
+		Object[] columns = { "Nom du plat", "date commande", "menu enfant"};
+		Object[] columns2 = { "Nom du plat", "date commande", "menu enfant","idcommande"};
+		// Créer le modèle de la JTable
+		final DefaultTableModel model = new DefaultTableModel(columns, 0);
+		final DefaultTableModel model2 = new DefaultTableModel(columns2, 0);
+		String requete = "SELECT idplat,dateheurecommande,menuenfant,idcommande FROM commande WHERE statut='saisie' ORDER BY menuenfant DESC, dateheurecommande";
+		try {
+			int idPlat = -1;
+			int idcommande = -1;
+			String dateheurecommande = "";
+			boolean menuenfant = false;
+			ResultSet rs = null;
+			Statement stmt = DBConnection.con.createStatement();
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+
+				idPlat = rs.getInt("idplat");
+				String requeteNomPlat = "SELECT nom FROM plat WHERE idplat=" + idPlat;
+				try {
+					dateheurecommande = rs.getString("dateheurecommande");
+					idcommande = rs.getInt("idcommande");
+					menuenfant = rs.getBoolean("menuenfant");
+					String nomPlat = "";
+					ResultSet rs2 = null;
+					Statement stmt2 = DBConnection.con.createStatement();
+					rs2 = stmt2.executeQuery(requeteNomPlat);
+					while (rs2.next()) {
+
+						nomPlat = rs2.getString("nom");
+						model.addRow(new Object[] { nomPlat, dateheurecommande, menuenfant, idcommande });
+						model2.addRow(new Object[] { nomPlat, dateheurecommande, menuenfant, idcommande });
+					}
+				} catch (Exception e) {
+					System.out.println(e.getLocalizedMessage());
+				}
+
+		
+
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e1) {
+			System.out.println(e1.getMessage());
+		}
+		final JTable table = new JTable(model) {
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
+		// Empecher la modifications des valeurs directement
+		table.isCellEditable(0, 0);
+
+		JPanel panelCentre = new JPanel(new GridLayout(1, 1));
+		panelCentre.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+		panel.add(panelCentre, BorderLayout.CENTER);// ajout du panelCentre au panel principal
+
+		composerFrame.pack();
+		composerFrame.setLocationRelativeTo(null);
+		composerFrame.setVisible(true);
+
+		validateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// System.out.println(model.getValueAt(table.getSelectedRow(),
+				// table.getSelectedColumn()));
+				int column = 0;
+				int row = table.getSelectedRow();
+				String nomPlat = table.getModel().getValueAt(row, column).toString();
+				int idCommande = (Integer) model2.getValueAt(row, 3);
+				prepareCommande(nomPlat,idCommande);
+				composerFrame.dispose();
+				visualiserCommande();
+			}
+		});
+
+	}
+
+	public void prepareCommande(String nomPlat, int idCommande) {
+		System.out.println("ici");
+
+		String requeteidPlat = "SELECT idplat FROM plat WHERE nom='" + nomPlat + "'";
+		try {
+			int idPlat = -1;
+			ResultSet rs = null;
+			Statement stmt = DBConnection.con.createStatement();
+			rs = stmt.executeQuery(requeteidPlat);
+			while (rs.next()) {
+				idPlat = rs.getInt("idplat");
+			}
+
+			String requeteCompositionPlat = "SELECT idmatierepremiere,quantitematierepremiere FROM compositionplat WHERE idplat="
+					+ idPlat;
+			int idMatierePremiere = -1;
+			int quantiteMatierePremiere = -1;
+			ResultSet rs2 = null;
+			Statement stmt2 = DBConnection.con.createStatement();
+			rs2 = stmt2.executeQuery(requeteCompositionPlat);
+			while (rs2.next()) {
+				idMatierePremiere = rs2.getInt("idmatierepremiere");
+				quantiteMatierePremiere = rs2.getInt("quantitematierepremiere");
+
+				String requeteQuantite = "SELECT quantite FROM matierepremiere WHERE idmatierepremiere="
+						+ idMatierePremiere;
+				ResultSet rs3 = null;
+				int quantite = -1;
+				Statement stmt3 = DBConnection.con.createStatement();
+				rs3 = stmt3.executeQuery(requeteQuantite);
+				while (rs3.next()) {
+					quantite = rs3.getInt("quantite");
+					PreparedStatement pst;
+					int quantiteLeft = quantite - quantiteMatierePremiere;
+					pst = DBConnection.con.prepareStatement("UPDATE matierepremiere SET quantite=" + quantiteLeft
+							+ "WHERE idmatierepremiere=" + idMatierePremiere);
+					pst.execute();
+				}
+				
+				PreparedStatement pst;
+				pst = DBConnection.con.prepareStatement("UPDATE commande SET statut='a servir' WHERE idcommande="+idCommande);
+				System.out.println(pst);
+				pst.execute();
+			}
+
+			JOptionPane.showMessageDialog(null, "Plat préparé");
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+		}
+		
+		
 
 	}
 
@@ -440,9 +583,9 @@ public class InterfaceCuisinier {
 						pst.execute();
 						JOptionPane.showMessageDialog(null, "Plat défini !");
 					} else {
-						JOptionPane.showMessageDialog(null,"Impossible de definir le plat (certain champs sont peut-étre vide)");
+						JOptionPane.showMessageDialog(null,
+								"Impossible de definir le plat (certain champs sont peut-étre vide)");
 					}
-
 
 				} catch (SQLException e1) {
 					e1.printStackTrace();
@@ -474,7 +617,7 @@ public class InterfaceCuisinier {
 		platFrame.setVisible(true);
 
 	}
-	
+
 	public int getidPlat(String nomPlat) {
 		int idPlat = -1;
 		ResultSet rs = null;
