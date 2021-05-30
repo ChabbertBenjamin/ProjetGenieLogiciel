@@ -80,15 +80,15 @@ public class InterfaceServeur {
 		int j = 0;
 		try {
 			Statement stmt = DBConnection.con.createStatement();
-			ArrayList<Table> listeTable = new ArrayList<Table>();
-			ArrayList<JButton> listButton = new ArrayList<JButton>();
+			final ArrayList<Table> listeTable = new ArrayList<Table>();
+			final ArrayList<JButton> listButton = new ArrayList<JButton>();
 			// On récupere les tables correspondant à l'employé
 			ResultSet rs = stmt.executeQuery(
 					"SELECT idtable, statut, nbcouverts, etage, idemploye from tables WHERE idemploye =" + idEmploye);
 			while (rs.next()) {
 				listeTable.add(new Table(rs.getInt("idtable"), rs.getString("statut"), rs.getInt("nbcouverts"),
 						rs.getInt("etage"), rs.getInt("idemploye")));
-				JButton buttonTable = new JButton("Table numéro : " + rs.getInt("idtable"));
+				final JButton buttonTable = new JButton("Table numéro : " + rs.getInt("idtable"));
 				// On associe a chaque bouton une couleur en fonction du statut de la table
 				if (rs.getString("statut").equals("propre")) {
 					buttonTable.setBackground(Color.GREEN);
@@ -128,7 +128,7 @@ public class InterfaceServeur {
 	}
 
 	// Fonction permettant d'afficher les détails d'une table selectionner
-	public void detailTable(Table table) {
+	public void detailTable(final Table table) {
 		// Création des composants
 		detailFrame = new JFrame("Détails de la table");
 		detailFrame.setSize(700, 600);
@@ -240,7 +240,7 @@ public class InterfaceServeur {
 	// Fonction qui permet d'afficher les commandes pour un repas d'un client
 	public void voirRepas(Table table) {
 		// Création des composants
-		JFrame voirRepasFrame = new JFrame("Repas en cours");
+		final JFrame voirRepasFrame = new JFrame("Repas en cours");
 		voirRepasFrame.setSize(700, 600);
 		voirRepasFrame.setLayout(new GridLayout(0, 1));
 		voirRepasFrame.getContentPane().setBackground(Color.gray);
@@ -373,9 +373,9 @@ public class InterfaceServeur {
 	}
 
 	// Fonction qui permet de saisir sa commande
-	public void saisirCommande(Table table) {
+	public void saisirCommande(final Table table) {
 
-		JComboBox<Plat> listPlat = new JComboBox<Plat>();
+		final JComboBox<Plat> listPlat = new JComboBox<Plat>();
 		// On récupére la liste des plats
 		try {
 			Statement stmt = DBConnection.con.createStatement();
@@ -402,7 +402,7 @@ public class InterfaceServeur {
 		GridBagConstraints labCnst = new GridBagConstraints();
 		JLabel lidTable = new JLabel("Numéro de la table : " + table.getIdtable());
 		JLabel lMenuEnfant = new JLabel("Menu Enfant : ");
-		JCheckBox cbMenuEnfant = new JCheckBox();
+		final JCheckBox cbMenuEnfant = new JCheckBox();
 		JButton btnAjouter = new JButton("Ajouter le plat");
 		JButton btnRetour = new JButton("Retour");
 		labCnst.fill = GridBagConstraints.NONE;

@@ -11,7 +11,7 @@ import org.junit.Test;
 import fr.ul.miage.restaurant.bdd.DBConnection;
 import fr.ul.miage.restaurant.menu.InterfaceAssistantService;
 
-public class TestTableAssistantService {
+public class InterfaceAssistantServiceTest {
 	
 	@Test
 	public void getDataTest() {
