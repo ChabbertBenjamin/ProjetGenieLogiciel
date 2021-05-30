@@ -1,4 +1,4 @@
-package fr.ul.miage.restaurant.menu;
+package fr.ul.miage.restaurant.menu.direteur;
 
 import java.awt.Color;
 
@@ -34,8 +34,10 @@ public class InterfaceDirecteur {
 	private JFrame mainFrame;
 	private JPanel controlPanel;
 	
-
 	
+	public static void main(String[] args) {
+		new InterfaceDirecteur();
+	}
 
 	public InterfaceDirecteur() {
 		mainFrame = new JFrame("Directeur");
@@ -81,6 +83,7 @@ public class InterfaceDirecteur {
 		JButton billButton = new JButton("Gerer carte du jour");
 		JButton afButton = new JButton("Gerer employé");
 		JButton dlButton = new JButton("Analyse des ventes");
+		JButton recetteDuJour = new ButtonRecetteDuJour(this);
 
 		fkButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -104,6 +107,7 @@ public class InterfaceDirecteur {
 		controlPanel.add(afButton);
 		controlPanel.add(billButton);
 		controlPanel.add(dlButton);
+		controlPanel.add(recetteDuJour);
 
 	}
 	
@@ -613,6 +617,7 @@ public class InterfaceDirecteur {
 		return list;
 	}
 	
-
-
+	public JPanel getControlPanel() {
+		return controlPanel;
+	}
 }
