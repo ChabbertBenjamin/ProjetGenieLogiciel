@@ -146,12 +146,6 @@ public class InterfaceCuisinier {
 
 		JLabel labelNomPlat = new JLabel("Selectionner le nom du plat ");
 		final JComboBox<String> listNomPlat = getListPlat();
-
-		/*
-		 * Object [] col = {"Nom","Quantité"}; Object[][] data= new Object[5][5];
-		 * 
-		 * JTable cart = new JTable(data, col);
-		 */
 		final JButton okButton = new JButton("OK");
 
 		okButton.addActionListener(new ActionListener() {
@@ -227,7 +221,14 @@ public class InterfaceCuisinier {
 		} catch (Exception e1) {
 			System.out.println(e1.getMessage());
 		}
-		JTable table = new JTable(model);
+		JTable table = new JTable(model){
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
+		// Empecher la modifications des valeurs directement
+		table.isCellEditable(0,0);
+
 		JPanel panelCentre = new JPanel(new GridLayout(1, 1));
 		panelCentre.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		panel.add(panelCentre, BorderLayout.CENTER);// ajout du panelCentre au panel principal
@@ -309,6 +310,7 @@ public class InterfaceCuisinier {
 			}
 		});
 	}
+
 	
 	public void insertCompositionPlat(DefaultTableModel model, String nomPlat) {
 		// Récupérer l'id du plat
@@ -381,7 +383,110 @@ public class InterfaceCuisinier {
 	}
 
 	public void visualiserCommande() {
+		final JFrame composerFrame = new JFrame("Visualisation commande");
+		composerFrame.setSize(600, 550);
+		composerFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		JPanel panel = new JPanel(new BorderLayout(10, 20)); // panel principal
+		panel.setPreferredSize(new Dimension(600, 550));
+		composerFrame.add(panel);
+		
+		// bouton valider à droite
+		JButton validateButton = new JButton("Préparer");
+		JPanel panelWest = new JPanel(new GridLayout(13, 1));
+		panelWest.add(validateButton);
+		panel.add(panelWest, BorderLayout.EAST);// ajout du panelWest au panel principal
 
+		// JTable au milieu
+		Object[] columns = { "Nom du plat", "date commande", "menu enfant" };
+		// Créer le modèle de la JTable
+		final DefaultTableModel model = new DefaultTableModel(columns, 0);
+		String requete ="SELECT idplat,dateheurecommande,menuenfant FROM commande WHERE statut='saisie'";
+		try {
+			int idPlat = -1;
+			String dateheurecommande="";
+			boolean menuenfant=false;
+			ResultSet rs = null;
+			Statement stmt = DBConnection.con.createStatement();
+			rs = stmt.executeQuery(requete);
+			while (rs.next()) {
+				// Si on rentre c'est qu'il y a déjà une composition pour ce plat
+				idPlat = rs.getInt("idplat");
+				String requeteNomPlat ="SELECT nom FROM plat WHERE idplat="+idPlat;
+				try {
+					dateheurecommande = rs.getString("dateheurecommande");
+					menuenfant = rs.getBoolean("menuenfant");
+					String nomPlat ="";
+					ResultSet rs2 = null;
+					Statement stmt2 = DBConnection.con.createStatement();
+					rs2 = stmt2.executeQuery(requeteNomPlat);
+					while (rs2.next()) {
+						
+						nomPlat = rs2.getString("nom");
+						model.addRow(new Object[] { nomPlat, dateheurecommande, menuenfant });
+					}
+				}catch (Exception e) {
+					System.out.println(e.getLocalizedMessage());
+				}
+				
+				
+				// Ajout dans la JTable
+				
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e1) {
+			System.out.println(e1.getMessage());
+		}
+		JTable table = new JTable(model){
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
+		// Empecher la modifications des valeurs directement
+		table.isCellEditable(0,0);
+
+		JPanel panelCentre = new JPanel(new GridLayout(1, 1));
+		panelCentre.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+		panel.add(panelCentre, BorderLayout.CENTER);// ajout du panelCentre au panel principal
+/*
+		// ELEMENT EN BAS
+		JPanel panelSouth = new JPanel(new GridLayout(3, 2));
+		JLabel labelNomMatierePremiere = new JLabel("Selectionner la matière première");
+		final JComboBox<String> listMatierePremiere = getListMatierePremiere();
+		JLabel labelQuantite = new JLabel("Donner une quantité");
+		final JTextField textFieldQuantite = new JTextField();
+		JButton add = new JButton("Ajouter/Enlever");
+		final JButton delete = new JButton("Supprimer matière première");
+		panelSouth.add(labelNomMatierePremiere);
+		panelSouth.add(listMatierePremiere);
+		panelSouth.add(labelQuantite);
+		panelSouth.add(textFieldQuantite);
+		panelSouth.add(add);
+		panelSouth.add(delete);
+		panel.add(panelSouth, BorderLayout.SOUTH);// ajout du panelSouth au panel principal
+*/
+		composerFrame.pack();
+		composerFrame.setLocationRelativeTo(null);
+		composerFrame.setVisible(true);
+		/*
+		// Action des boutons
+		add.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		*/
+		validateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
 	}
 
 	public void definirPlat() {
