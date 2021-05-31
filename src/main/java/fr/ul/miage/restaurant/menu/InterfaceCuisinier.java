@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.menu.assistant.OnlyOnRowToBeSelected;
 import fr.ul.miage.restaurant.models.Stock;
 
 public class InterfaceCuisinier {
@@ -445,6 +446,7 @@ public class InterfaceCuisinier {
 				return false;
 			}
 		};
+		table.setSelectionModel(new OnlyOnRowToBeSelected());
 		// Empecher la modifications des valeurs directement
 		table.isCellEditable(0, 0);
 
