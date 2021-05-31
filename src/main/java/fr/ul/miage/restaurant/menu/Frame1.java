@@ -18,6 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.menu.assistant.InterfaceAssistantService;
 
 public class Frame1 extends JFrame {
 
