@@ -382,7 +382,14 @@ public class InterfaceServeur {
 		// On récupére la liste des plats
 		try {
 			Statement stmt = DBConnection.con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT idplat, idcategorie, prix, nom FROM plat");
+			//ResultSet rs = stmt.executeQuery("SELECT idplat, idcategorie, prix, nom FROM plat");
+			ResultSet rs = stmt.executeQuery("SELECT plat.idplat as idplat, plat.idcategorie as idCategorie, plat.prix as prix, plat.nom as nomserve\n"
+                    + "FROM plat \n"
+                    + "WHERE plat.idplat NOT IN(\n"
+                    + "SELECT cp.idplat\n"
+                    + "FROM compositionplat as cp, matierepremiere as mp\n"
+                    + "WHERE cp.idmatierepremiere = mp.idmatierepremiere\n"
+                    + "AND cp.quantitematierepremiere > mp.quantite)");
 			while (rs.next()) {
 				// On ajoute chaque plat dans notre ComboBox
 				listPlat.addItem(new Plat(rs.getInt("idPlat"), rs.getInt("idCategorie"), rs.getInt("prix"),
