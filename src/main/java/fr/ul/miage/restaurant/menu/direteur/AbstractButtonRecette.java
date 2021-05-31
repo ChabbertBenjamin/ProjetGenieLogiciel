@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
 
-public  abstract class AbstractButtonRecette extends JButton {
+public  abstract class AbstractButtonRecette extends JButton { 
 	
 	
 	private final InterfaceDirecteur parent;
