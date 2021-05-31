@@ -1,9 +1,5 @@
 package testUnitaire;
 
-import fr.ul.miage.restaurant.menu.InterfaceDirecteur;
-import fr.ul.miage.restaurant.models.Stock;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,9 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import fr.ul.miage.restaurant.menu.direteur.InterfaceDirecteur;
+import fr.ul.miage.restaurant.models.Stock;
 
 @ExtendWith(MockitoExtension.class)
 public class InterfaceDirecteurTest {
