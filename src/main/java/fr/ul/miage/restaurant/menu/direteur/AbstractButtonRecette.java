@@ -11,11 +11,8 @@ import java.text.MessageFormat;
 public  abstract class AbstractButtonRecette extends JButton {
 	
 	
-	private final InterfaceDirecteur parent;
-	
 	public AbstractButtonRecette(String text, InterfaceDirecteur parent) {
 		super(text);
-		this.parent = parent;
 		addActionListener(event -> {
 			try {
 				DBConnection.connection();
