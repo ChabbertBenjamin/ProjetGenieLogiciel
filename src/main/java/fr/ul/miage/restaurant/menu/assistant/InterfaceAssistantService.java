@@ -1,4 +1,4 @@
-package fr.ul.miage.restaurant.menu;
+package fr.ul.miage.restaurant.menu.assistant;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -142,7 +142,9 @@ public class InterfaceAssistantService {
 		cart.setSize(300, 450);
 
 		cart.setAutoCreateRowSorter(true);
-		cart.setEnabled(false);
+		cart.setEnabled(true);
+		cart.setSelectionModel(new OnlyOnRowToBeSelected());
+		cart.setRowSelectionAllowed(true);
 		jp.setLayout(new FlowLayout());
 
 		jp.add(new JScrollPane(cart, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
@@ -150,8 +152,9 @@ public class InterfaceAssistantService {
 		JComboBox<String> list = new JComboBox<String>();
 		list.addItem("");
 		final JComboBox<String> listTableToSet = getListTableToSet(list);
-
+		JButton desservirTableSelectionnee = new JButton("Desservir la table sélectionné");
 		JButton setTable = new JButton("Dresser la table sélectionné");
+		
 		setTable.setSize(40, 50);
 
 		setTable.addActionListener(new ActionListener() {
@@ -173,9 +176,32 @@ public class InterfaceAssistantService {
 				}
 			}
 		});
+		
+		desservirTableSelectionnee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = cart.getSelectedRow();
+				if (selectedRow == -1 || !"occupe".equals(cart.getModel().getValueAt(selectedRow,1))) {
+					JOptionPane.showMessageDialog(null, "Vous devez séléctionné une ligne de table occupée");
+				} else {
+					PreparedStatement pst;
+					try {
+						Object selectedTableId = cart.getModel().getValueAt(selectedRow, 0);
+						pst = DBConnection.con.prepareStatement("UPDATE tables SET statut='sale' WHERE idTable="
+								+ selectedTableId);
+						pst.execute();
+						JOptionPane.showMessageDialog(null, "Table desservie !");
+						tableFrame.dispose();
+						seeTable();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 
 		jp.add(listTableToSet);
 		jp.add(setTable);
+		jp.add(desservirTableSelectionnee);
 		tableFrame.add(jp);
 		tableFrame.setLocationRelativeTo(null);
 		tableFrame.setVisible(true);
