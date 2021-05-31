@@ -18,12 +18,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.models.Commande;
+import fr.ul.miage.restaurant.models.Plat;
 import fr.ul.miage.restaurant.models.Table;
 
 public class InterfaceServeur {

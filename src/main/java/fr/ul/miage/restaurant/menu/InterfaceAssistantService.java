@@ -1,4 +1,4 @@
-package fr.ul.miage.restaurant.menu.assistant;
+package fr.ul.miage.restaurant.menu;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -143,7 +143,7 @@ public class InterfaceAssistantService {
 
 		cart.setAutoCreateRowSorter(true);
 		cart.setEnabled(true);
-		cart.setSelectionModel(new OnlyOnRowToBeSelected());
+
 		cart.setRowSelectionAllowed(true);
 		jp.setLayout(new FlowLayout());
 
