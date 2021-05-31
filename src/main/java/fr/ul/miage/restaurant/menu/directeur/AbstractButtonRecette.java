@@ -1,8 +1,6 @@
-
-package fr.ul.miage.restaurant.menu.direteur;
+package fr.ul.miage.restaurant.menu.directeur;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
-import fr.ul.miage.restaurant.menu.InterfaceDirecteur;
 
 import javax.swing.*;
 import java.sql.ResultSet;
@@ -10,14 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
 
-public  abstract class AbstractButtonRecette extends JButton { 
+public  abstract class AbstractButtonRecette extends JButton {
 	
-	
-	private final InterfaceDirecteur parent;
 	
 	public AbstractButtonRecette(String text, InterfaceDirecteur parent) {
 		super(text);
-		this.parent = parent;
 		addActionListener(event -> {
 			try {
 				DBConnection.connection();

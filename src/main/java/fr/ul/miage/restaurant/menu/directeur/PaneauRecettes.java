@@ -1,4 +1,4 @@
-package fr.ul.miage.restaurant.menu.direteur;
+package fr.ul.miage.restaurant.menu.directeur;
 
 
 import javax.swing.*;

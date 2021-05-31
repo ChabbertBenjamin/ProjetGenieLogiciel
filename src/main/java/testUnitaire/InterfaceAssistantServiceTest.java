@@ -1,15 +1,17 @@
 package testUnitaire;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import javax.swing.JComboBox;
+
 import org.junit.Test;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
-import fr.ul.miage.restaurant.menu.InterfaceAssistantService;
+import fr.ul.miage.restaurant.menu.assistant.InterfaceAssistantService;
 
 public class InterfaceAssistantServiceTest {
 	

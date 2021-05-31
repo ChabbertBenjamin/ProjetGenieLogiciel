@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import fr.ul.miage.restaurant.menu.InterfaceDirecteur;
+import fr.ul.miage.restaurant.menu.directeur.InterfaceDirecteur;
 import fr.ul.miage.restaurant.models.Stock;
 
 @ExtendWith(MockitoExtension.class)
