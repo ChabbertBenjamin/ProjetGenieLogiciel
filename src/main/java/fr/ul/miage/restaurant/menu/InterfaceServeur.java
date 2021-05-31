@@ -383,7 +383,7 @@ public class InterfaceServeur {
 		try {
 			Statement stmt = DBConnection.con.createStatement();
 			//ResultSet rs = stmt.executeQuery("SELECT idplat, idcategorie, prix, nom FROM plat");
-			ResultSet rs = stmt.executeQuery("SELECT plat.idplat as idplat, plat.idcategorie as idCategorie, plat.prix as prix, plat.nom as nomserve\n"
+			ResultSet rs = stmt.executeQuery("SELECT plat.idplat as idPlat, plat.idcategorie as idCategorie, plat.prix as prix, plat.nom as nomserve\n"
                     + "FROM plat \n"
                     + "WHERE plat.idplat NOT IN(\n"
                     + "SELECT cp.idplat\n"
@@ -393,7 +393,7 @@ public class InterfaceServeur {
 			while (rs.next()) {
 				// On ajoute chaque plat dans notre ComboBox
 				listPlat.addItem(new Plat(rs.getInt("idPlat"), rs.getInt("idCategorie"), rs.getInt("prix"),
-						rs.getString("nom")));
+						rs.getString("nomserve")));
 
 			}
 			rs.close();
