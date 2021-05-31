@@ -1,4 +1,4 @@
-package fr.ul.miage.restaurant.menu;
+package fr.ul.miage.restaurant.menu.direteur;
 
 import java.awt.Color;
 
@@ -34,8 +34,13 @@ public class InterfaceDirecteur {
 	private JFrame mainFrame;
 	private JPanel controlPanel;
 	
-
+	PaneauRecettes paneauRecettes;
 	
+	
+	
+	public static void main(String[] args) {
+		new InterfaceDirecteur();
+	}
 
 	public InterfaceDirecteur() {
 		mainFrame = new JFrame("Directeur");
@@ -54,10 +59,13 @@ public class InterfaceDirecteur {
 		headerLabel.setForeground(Color.white);
 
 		controlPanel = new JPanel();
+		paneauRecettes = new PaneauRecettes();
+		
 		controlPanel.setLayout(new GridLayout(1, 5));
 
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
+		mainFrame.add(paneauRecettes);
 		mainFrame.setLocationRelativeTo(null);
 
 		// On ferme la connection à la BDD lorsqu'on ferme la fenêtre
@@ -81,6 +89,9 @@ public class InterfaceDirecteur {
 		JButton billButton = new JButton("Gerer carte du jour");
 		JButton afButton = new JButton("Gerer employé");
 		JButton dlButton = new JButton("Analyse des ventes");
+		JButton recetteDuJour = new ButtonRecetteDuJour(this);
+		JButton recetteDeLaSemaine = new ButtonRecetteDeLaSemaine(this);
+		JButton recetteDuMois = new ButtonRecetteDuMois(this);
 
 		fkButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -104,6 +115,11 @@ public class InterfaceDirecteur {
 		controlPanel.add(afButton);
 		controlPanel.add(billButton);
 		controlPanel.add(dlButton);
+		
+		
+		paneauRecettes.add(recetteDuJour);
+		paneauRecettes.add(recetteDeLaSemaine);
+		paneauRecettes.add(recetteDuMois);
 
 	}
 	
@@ -613,6 +629,7 @@ public class InterfaceDirecteur {
 		return list;
 	}
 	
-
-
+	public JPanel getControlPanel() {
+		return controlPanel;
+	}
 }

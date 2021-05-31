@@ -6,12 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,6 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import fr.ul.miage.restaurant.bdd.DBConnection;
+import fr.ul.miage.restaurant.menu.direteur.InterfaceDirecteur;
 
 public class Frame1 extends JFrame {
 
