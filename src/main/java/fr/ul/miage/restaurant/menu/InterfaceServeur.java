@@ -1,8 +1,10 @@
 package fr.ul.miage.restaurant.menu;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -16,17 +18,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JTextField;
 import fr.ul.miage.restaurant.bdd.DBConnection;
-import fr.ul.miage.restaurant.models.Commande;
-import fr.ul.miage.restaurant.models.Plat;
 import fr.ul.miage.restaurant.models.Table;
 
 public class InterfaceServeur {
@@ -237,7 +234,6 @@ public class InterfaceServeur {
 		detailFrame.setVisible(true);
 	}
 
-<<<<<<< HEAD
 	// Fonction qui permet d'afficher les commandes pour un repas d'un client
 	public void voirRepas(Table table) {
 		// Création des composants
@@ -255,13 +251,6 @@ public class InterfaceServeur {
 		voirRepasFrame.add(headerLabel);
 		voirRepasFrame.add(controlPanel);
 		voirRepasFrame.add(btnPanel);
-=======
-	
-	public void saisirCommande() {
-		final JFrame commandeFrame = new JFrame("Saisir commande");
-		commandeFrame.setSize(700, 600);
-		commandeFrame.setLayout(new GridLayout(3, 1));
->>>>>>> parent of 1635f53... Feat(class InterfaceMaitreDhotel): Benjamin Chabbert :us29
 
 		// Création du tableau contenant les commandes
 		String[] columnNames = { "Nom ", "Prix", "Date", "Menu enfant", "Addition" };
@@ -285,7 +274,6 @@ public class InterfaceServeur {
 
 	}
 
-<<<<<<< HEAD
 	// Fonction utiliser dans voirRepas() qui nous retourne la liste des commandes
 	public String[][] getDataRepas(Table table) {
 
@@ -393,27 +381,6 @@ public class InterfaceServeur {
 				// On ajoute chaque plat dans notre ComboBox
 				listPlat.addItem(new Plat(rs.getInt("idPlat"), rs.getInt("idCategorie"), rs.getInt("prix"),
 						rs.getString("nom")));
-		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
-		commandeFrame.add(headerLabel);
-		commandeFrame.add(controlPanel);
-		commandeFrame.setVisible(true);
-		GridLayout experimentLayout = new GridLayout(0, 2);
-		
-		JLabel idplat = new JLabel("Entrer id plat");
-		final JTextField textFieldidPlat = new JTextField();
-		textFieldidPlat.setSize(100, 40);
-
-		JLabel statut = new JLabel("Entrer statut");
-		final JTextField textFieldStatut = new JTextField();
-		textFieldStatut.setSize(100, 40);
-		
-		JLabel idrepasclient = new JLabel("Entrer id repas client");
-		final JTextField textFieldidrepasclient = new JTextField();
-		textFieldidrepasclient.setSize(100, 40);
-	
-		
-		JButton okButton = new JButton("OK");
 
 			}
 			rs.close();
@@ -474,7 +441,6 @@ public class InterfaceServeur {
 					// On récupére le plat selectionner dans la ComboBox
 					Plat platSelect = (Plat) listPlat.getSelectedItem();
 					Statement stmt = DBConnection.con.createStatement();
-
 					Statement stmt2 = DBConnection.con.createStatement();
 					// On récupére les repasclient lié a la table
 					ResultSet rs = stmt.executeQuery(
@@ -519,50 +485,6 @@ public class InterfaceServeur {
 
 		});
 
-
-					if (textFieldidPlat.getText().equals("") || textFieldStatut.getText().equals("")
-							|| textFieldidrepasclient.getText().equals("") ) {
-						
-						test = false;
-					}
-				
-					pst = DBConnection.con.prepareStatement("INSERT into commande (idplat, statut,idrepasclient) values (?,?,?)");
-					pst.setInt(1, Integer.parseInt(textFieldidPlat.getText()));
-					pst.setString(2, textFieldStatut.getText());
-					pst.setInt(3, Integer.parseInt(textFieldidrepasclient.getText()));
-					
-					
-					if (test) {
-						pst.execute();
-						JOptionPane.showMessageDialog(null, "Commande saisi !");
-					}else {
-						JOptionPane.showMessageDialog(null,
-								"Impossible de saisir la commande (certain champs sont peut-étre vide)");
-					}
-					rs.close();
-				
-				}catch (SQLException e1) {
-					e1.printStackTrace();
-				}finally {
-					commandeFrame.dispose();
-					saisirCommande();
-				}
-					
-				}
-		});
-
-		JPanel jp = new JPanel(null);
-		jp.add(idplat);
-		jp.add(textFieldidPlat);
-		jp.add(statut);
-		jp.add(textFieldStatut);
-		jp.add(idrepasclient);
-		jp.add(textFieldidrepasclient);
-		
-		jp.setSize(500, 500);
-		jp.setLayout(experimentLayout);
-		controlPanel.add(jp);
-		jp.add(okButton);
 		commandeFrame.setLocationRelativeTo(null);
 		commandeFrame.setVisible(true);
 	}
