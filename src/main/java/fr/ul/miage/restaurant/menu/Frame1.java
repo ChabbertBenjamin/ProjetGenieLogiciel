@@ -24,7 +24,7 @@ import fr.ul.miage.restaurant.bdd.DBConnection;
 public class Frame1 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
- 
+
 	public Frame1() {
 		// Connection à la base de données
 		DBConnection.connection();
