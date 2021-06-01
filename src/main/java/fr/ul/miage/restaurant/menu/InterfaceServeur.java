@@ -546,7 +546,7 @@ public class InterfaceServeur {
 	}
 
 	// Retourne l'index du boutton pour la table destiné.
-	private int retourIndexButton(ArrayList<JButton> buttonList, JButton button) {
+	public int retourIndexButton(ArrayList<JButton> buttonList, JButton button) {
 		for (int i = 0; i < buttonList.size(); i++) {
 			if (buttonList.get(i).equals(button)) {
 				return i;
